@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BRImaps v2 - Distribution Channel Dashboard</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Leaflet -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- Material Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      #map {
+        height: 100%;
+        width: 100%;
+      }
+
+      .sidebar-icon {
+        cursor: pointer;
+        padding: 12px;
+        color: #9ca3af;
+        transition: all 0.2s;
+      }
+
+      .sidebar-icon:hover {
+        background: #374151;
+        color: #fff;
+      }
+
+      .metric-label {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 4px 12px;
+        color: #fff;
+      }
+
+      .tab-active {
+        border-bottom: 4px solid #00569c;
+        color: #00569c;
+        font-weight: bold;
+        background: #fff;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 flex">
+    <!-- SIDEBAR -->
+    <aside class="w-14 bg-[#1e1e1e] flex flex-col items-center py-4 z-50">
+      <div class="mb-8 text-blue-500">
+        <span class="material-icons">layers</span>
+      </div>
+
+      <div class="sidebar-icon text-white bg-blue-600 rounded">
+        <span class="material-icons" title="Dashboard">dashboard</span>
+      </div>
+
+      <a
+        href="https://archipelago.data.bri.co.id/portal/apps/dashboards/fa5b17b92a6449609e0d428cce955c89"
+        target="_blank"
+        class="sidebar-icon block"
+      >
+        <span class="material-icons" title="Maps by arcGIS">map</span>
+      </a>
+
+      <div class="sidebar-icon">
+        <span class="material-icons" title="Analisa POI">business</span>
+      </div>
+      <div class="sidebar-icon">
+        <span class="material-icons">assessment</span>
+      </div>
+
+      <div class="mt-auto sidebar-icon">
+        <span class="material-icons">settings</span>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="flex-1 flex flex-col">
+      <!-- HEADER -->
+      <header
+        class="h-12 bg-white border-b flex items-center justify-between px-4"
+      >
+        <span class="text-blue-800 font-bold">
+          BRImaps <span class="text-gray-400 font-normal">v2</span>
+        </span>
+
+        <div class="flex items-center gap-2 text-xs">
+          <div class="text-right">
+            <p class="font-bold">Team CLO</p>
+            <p class="text-gray-400">clo@bankbri.co.id</p>
+          </div>
+          <div
+            class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center"
+          >
+            BRI
+          </div>
+        </div>
+      </header>
+
+      <!-- DASHBOARD -->
+      <div class="bg-white p-4 shadow border-b">
+        <h1 class="text-xl font-bold text-blue-800 mb-3">
+          Distribution Channel Dashboard
+        </h1>
+
+        <div class="grid grid-cols-4 gap-4">
+          <div class="border rounded overflow-hidden">
+            <div class="bg-[#004a99] metric-label">Kantor Cabang</div>
+            <div class="p-2 text-center text-2xl font-bold text-blue-900">
+              454
+            </div>
+          </div>
+
+          <div class="border rounded overflow-hidden">
+            <div class="bg-[#f37021] metric-label">KCP</div>
+            <div class="p-2 text-center text-2xl font-bold text-orange-600">
+              555
+            </div>
+          </div>
+
+          <div class="border rounded overflow-hidden">
+            <div class="bg-[#00c853] metric-label">Unit</div>
+            <div class="p-2 text-center text-2xl font-bold text-green-600">
+              5.1k
+            </div>
+          </div>
+
+          <div class="border rounded overflow-hidden">
+            <div class="bg-[#6a1b9a] metric-label">Kantor Kas</div>
+            <div class="p-2 text-center text-2xl font-bold text-purple-800">
+              491
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAP -->
+      <div class="relative flex-1">
+        <div id="map"></div>
+      </div>
+    </div>
+
+    <!-- MODAL DETAIL -->
+    <div
+      id="detailModal"
+      class="fixed inset-0 hidden z-[2000] flex items-center justify-center bg-black/40"
+    >
+      <div
+        class="bg-white w-[95%] max-w-6xl h-[90vh] rounded-lg shadow-2xl flex flex-col"
+      >
+        <!-- MODAL HEADER -->
+        <div class="px-6 py-3 border-b flex justify-between items-center">
+          <h2 class="text-lg font-bold" id="modalBranchName"></h2>
+          <button onclick="closeModal()">
+            <span class="material-icons text-gray-400 hover:text-black"
+              >close</span
+            >
+          </button>
+        </div>
+
+        <!-- TABS -->
+        <div class="flex bg-gray-100 px-6 text-sm">
+          <button class="tab-active px-5 py-3">Informasi</button>
+          <button class="px-5 py-3 text-gray-600">E-Channel</button>
+          <button class="px-5 py-3 text-gray-600">Performance & Potensi</button>
+          <button class="px-5 py-3 text-gray-600">Human Capital</button>
+          <button class="px-5 py-3 text-gray-600">Customer</button>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="flex-1 overflow-y-auto bg-gray-50 p-6">
+          <div class="bg-white rounded-lg shadow p-6 flex gap-6">
+            <!-- LEFT -->
+            <div class="flex-1 space-y-6">
+              <!-- IDENTITAS -->
+              <div>
+                <span
+                  class="inline-block bg-gray-200 text-xs font-bold px-3 py-1 rounded mb-3"
+                >
+                  Identitas
+                </span>
+
+                <table class="text-sm w-full leading-7">
+                  <tr>
+                    <td class="w-52 text-gray-500">Nama Unit Kerja</td>
+                    <td>: <span id="m-name"></span></td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Branch Code</td>
+                    <td>: <span id="m-code"></span></td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Kelas</td>
+                    <td>: IIA</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Klasifikasi Wilayah</td>
+                    <td>: Urban</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Branch Type</td>
+                    <td>: Kantor Cabang</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">KC Supervisi</td>
+                    <td>: KC Siak</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Region</td>
+                    <td>: Region 2 – Pekanbaru</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Area</td>
+                    <td>: Area Siak</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Koordinat</td>
+                    <td>: 0.798317, 102.049247</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Alamat</td>
+                    <td>: Jl. Raja Kecik RT.12 RW.4</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Desa</td>
+                    <td>: Kampung Dalam</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Kecamatan</td>
+                    <td>: Kec. Siak</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Kota/Kab.</td>
+                    <td>: Kab. Siak</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Provinsi</td>
+                    <td>: Riau</td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- FORMAT BRANCH -->
+              <div>
+                <span
+                  class="inline-block bg-gray-200 text-xs font-bold px-3 py-1 rounded mb-3"
+                >
+                  Format Branch
+                </span>
+
+                <table class="text-sm w-full leading-7">
+                  <tr>
+                    <td class="w-52 font-semibold">Konvensional</td>
+                    <td>: Tidak</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Senyum</td>
+                    <td>: Tidak</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">PNM</td>
+                    <td>: Tidak</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Pegadaian</td>
+                    <td>: Tidak</td>
+                  </tr>
+                  <tr>
+                    <td class="w-52 font-semibold">Hybrid</td>
+                    <td>: Ya</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">QMS</td>
+                    <td>: Tidak</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Digital CS</td>
+                    <td>: Ya</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">Community Branch</td>
+                    <td>: Tidak</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">BRIWork</td>
+                    <td>: Tidak</td>
+                  </tr>
+                  <tr>
+                    <td class="text-gray-500">BRICafe</td>
+                    <td>: Tidak</td>
+                  </tr>
+                  <tr>
+                    <td class="w-52 font-semibold">Digital Branch</td>
+                    <td>: Ya</td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- KEPEMILIKAN GEDUNG -->
+              <div>
+                <span
+                  class="inline-block bg-gray-200 text-xs font-bold px-3 py-1 rounded mb-3"
+                >
+                  Kepemilikan Gedung
+                </span>
+
+                <table class="text-sm w-full leading-7">
+                  <tr>
+                    <td class="w-52 text-gray-500">Jenis Kepemilikan</td>
+                    <td class="w-4">:</td>
+                    <td>Sewa</td>
+                  </tr>
+                  <tr>
+                    <td class="w-52 text-gray-500">Harga Sewa / Tahun</td>
+                    <td class="w-4">:</td>
+                    <td>Rp 180.000.000</td>
+                  </tr>
+                  <tr>
+                    <td class="w-52 text-gray-500">Jatuh Tempo</td>
+                    <td class="w-4">:</td>
+                    <td>Februari 2030</td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- UKO SUPERVISI -->
+              <div>
+                <span
+                  class="inline-block bg-gray-200 text-xs font-bold px-3 py-1 rounded mb-3"
+                >
+                  Uko Supervisi
+                </span>
+
+                <table class="text-sm w-full leading-7">
+                  <tr>
+                    <td class="w-52 font-semibold">Konvensional</td>
+                    <td>: Tidak</td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">Senyum</td>
+                    <td>: Tidak</td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">PNM</td>
+                    <td>: Tidak</td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">Pegadaian</td>
+                    <td>: Tidak</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="w-72 flex-shrink-0">
+              <img
+                src="https://fastly.4sqi.net/img/general/600x600/51253634_yN_O-f9TjNqW9p97Wz3mUv0-9G-8UvIu-9kY0_Yw.jpg"
+                class="rounded border w-full h-44 object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEAFLET -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+      const map = L.map("map").setView([0.79, 102.02], 10);
+
+      L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        { attribution: "© OpenStreetMap" }
+      ).addTo(map);
+
+      const branchData = [
+        {
+          name: "KC Siak",
+          code: "1190",
+          pos: [0.798317, 102.049247],
+          color: "#1e3a8a",
+        },
+        {
+          name: "KC Perawang",
+          code: "1234",
+          pos: [0.68, 101.62],
+          color: "#1e3a8a",
+        },
+      ];
+
+      function openModal(item) {
+        document.getElementById("modalBranchName").innerText = item.name;
+        document.getElementById("m-name").innerText = item.name;
+        document.getElementById("m-code").innerText = item.code;
+        document.getElementById("detailModal").classList.remove("hidden");
+      }
+
+      function closeModal() {
+        document.getElementById("detailModal").classList.add("hidden");
+      }
+
+      branchData.forEach((item) => {
+        const marker = L.circleMarker(item.pos, {
+          radius: 8,
+          fillColor: item.color,
+          color: "#fff",
+          weight: 2,
+          fillOpacity: 1,
+        }).addTo(map);
+
+        marker.on("click", () => openModal(item));
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+    </script>
+  </body>
+</html>
