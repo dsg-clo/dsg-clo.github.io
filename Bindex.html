@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BRImaps v2</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Material Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .sidebar-icon {
+        cursor: pointer;
+        padding: 12px;
+        color: #9ca3af;
+        transition: all 0.2s;
+      }
+      .sidebar-icon:hover {
+        background: #374151;
+        color: #fff;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 flex">
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="w-14 bg-[#1e1e1e] flex flex-col items-center py-4">
+      <div class="mb-8 text-blue-500">
+        <span class="material-icons">layers</span>
+      </div>
+
+      <div class="sidebar-icon text-white bg-blue-600 rounded">
+        <span class="material-icons">dashboard</span>
+      </div>
+
+      <!-- ARCHIPELAGO DASHBOARD -->
+      <div class="sidebar-icon" onclick="loadArchipelago()">
+        <span class="material-icons" title="Archipelago Dashboard">map</span>
+      </div>
+
+      <div class="sidebar-icon">
+        <span class="material-icons">business</span>
+      </div>
+
+      <div class="sidebar-icon">
+        <span class="material-icons">assessment</span>
+      </div>
+
+      <div class="mt-auto sidebar-icon">
+        <span class="material-icons">settings</span>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN ================= -->
+    <div class="flex-1 flex flex-col">
+      <!-- HEADER -->
+      <header
+        class="h-12 bg-white border-b flex items-center justify-between px-4"
+      >
+        <span class="text-blue-800 font-bold">
+          BRImaps <span class="text-gray-400 font-normal">v2</span>
+        </span>
+
+        <div class="flex items-center gap-2 text-xs">
+          <div class="text-right">
+            <p class="font-bold">Team CLO</p>
+            <p class="text-gray-400">clo@bankbri.co.id</p>
+          </div>
+          <div
+            class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center"
+          >
+            BRI
+          </div>
+        </div>
+      </header>
+
+      <!-- ================= CONTENT ================= -->
+      <div class="flex-1 bg-gray-200">
+        <iframe
+          id="archipelagoFrame"
+          class="w-full h-full border-0"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+
+    <!-- ================= SCRIPT ================= -->
+    <script>
+      /*
+      ===============================
+      TOKEN HANDLER
+      ===============================
+      ❗ TOKEN ASLI (SESUAI PERMINTAAN KAMU)
+      */
+      function getArchipelagoToken() {
+        return "xdETJxLW4yVxfqfaHGoB4TBx5WdZ42r87iK7ESPZZaaLpTLZGFHdqVD2kFa2ZB0HVRHSPj2GnvnhOqeEnMeazPtUavGQ0Jj6N_c533tNSTsEeVMkXQbrrXU9icQSXroNlEiaputQbKeMcl4gFdoVKIhAfmiRoIaPzClDZLp4fsODutSS6hVZEYvgyjckSNZi";
+      }
+
+      /*
+      ===============================
+      LOAD DASHBOARD
+      ===============================
+      */
+      function loadArchipelago() {
+        const token = getArchipelagoToken();
+
+        const url =
+          "https://archipelago.data.bri.co.id/portal/apps/dashboards/fa5b17b92a6449609e0d428cce955c89" +
+          "?token=" +
+          encodeURIComponent(token);
+
+        document.getElementById("archipelagoFrame").src = url;
+      }
+
+      // ===============================
+      // AUTO LOAD ON PAGE OPEN
+      // ===============================
+      window.onload = loadArchipelago;
+    </script>
+  </body>
+</html>
