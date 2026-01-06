@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BRImaps v2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="h-screen bg-gray-100 flex">
+    <!-- SIDEBAR -->
+    <aside class="w-14 bg-[#1e1e1e] flex flex-col items-center py-4">
+      <span class="material-icons text-white mb-6">dashboard</span>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="flex-1 flex flex-col">
+      <!-- HEADER -->
+      <header
+        class="h-12 bg-white border-b px-4 flex items-center justify-between"
+      >
+        <span class="font-bold text-blue-800">BRImaps v2</span>
+      </header>
+
+      <!-- DASHBOARD ARC GIS -->
+      <div class="flex-1 bg-black">
+        <iframe
+          id="arcgisFrame"
+          class="w-full h-full border-0"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+
+    <!-- TOKEN HANDLER -->
+    <script>
+      const TOKEN =
+        "xdETJxLW4yVxfqfaHGoB4TBx5WdZ42r87iK7ESPZZaaLpTLZGFHdqVD2kFa2ZB0HVRHSPj2GnvnhOqeEnMeazPtUavGQ0Jj6N_c533tNSTsEeVMkXQbrrXU9icQSXroNlEiaputQbKeMcl4gFdoVKIhAfmiRoIaPzClDZLp4fsODutSS6hVZEYvgyjckSNZi"; // 1 jam expired
+
+      const DASHBOARD_URL =
+        "https://archipelago.data.bri.co.id/portal/apps/dashboards/fa5b17b92a6449609e0d428cce955c89";
+
+      document.getElementById(
+        "arcgisFrame"
+      ).src = `${DASHBOARD_URL}?token=${TOKEN}`;
+    </script>
+  </body>
+</html>
