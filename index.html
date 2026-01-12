@@ -14,119 +14,46 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-
+    <link rel="stylesheet" href="css/style.css" />
     <style>
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        overflow: hidden;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      }
-      #map {
-        height: 100%;
-        width: 100%;
-      }
-      .sidebar-icon {
-        cursor: pointer;
-        padding: 12px;
-        color: #9ca3af;
-        transition: all 0.2s;
-      }
-      .sidebar-icon:hover {
-        background: #374151;
-        color: #fff;
-      }
-      .metric-label {
-        font-size: 10px;
-        font-weight: 700;
-        padding: 4px 12px;
-        color: #fff;
-      }
-      .tab-active {
-        border-bottom: 4px solid #00569c;
-        color: #00569c;
-        font-weight: bold;
-        background: #fff;
-      }
-
-      /* --- IMPROVED ESRI POPUP STYLING --- */
-      .leaflet-popup-content-wrapper {
-        padding: 0;
-        overflow: hidden;
-        border-radius: 4px;
-      }
-      .leaflet-popup-content {
-        margin: 0 !important;
-        width: 300px !important;
-      }
-
-      .esri-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 11px;
-        font-family: sans-serif;
-      }
-      .esri-table tr:nth-child(odd) {
-        background-color: #fcfcfc;
-      }
-      .esri-table tr:nth-child(even) {
-        background-color: #fff;
-      }
-      .esri-table th {
-        text-align: left;
-        padding: 8px 10px;
-        background-color: #f3f3f3;
-        color: #555;
-        font-weight: 600;
-        width: 40%;
-        border: 1px solid #eee;
-      }
-      .esri-table td {
-        padding: 8px 10px;
-        color: #323232;
-        border: 1px solid #eee;
-      }
-
-      .popup-footer {
-        padding: 10px;
-        background: white;
-        text-align: center;
-      }
-      .popup-btn {
-        background-color: #1e40af;
-        color: white;
-        padding: 8px;
-        border-radius: 4px;
-        font-size: 11px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 100%;
-        border: none;
-        transition: background 0.2s;
-      }
-      .popup-btn:hover {
-        background-color: #1e3a8a;
-      }
+      .metric-card { @apply bg-white rounded-lg border shadow-sm overflow-hidden; }
+      .metric-label { @apply text-white text-[10px] font-bold px-3 py-1 uppercase; }
+      .metric-value { @apply text-2xl font-bold px-3 py-2; }
+      .tab-active { @apply bg-white border-t-2 border-blue-600 text-blue-600 font-bold; }
+      #map { height: 100%; width: 100%; }
+      .esri-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+      .esri-table th { text-align: left; padding: 4px; color: #666; font-weight: normal; }
+      .esri-table td { padding: 4px; font-weight: bold; }
+      .popup-footer { margin-top: 8px; border-top: 1px solid #eee; padding-top: 8px; }
+      .popup-btn { width: 100%; background: #1e3a8a; color: white; padding: 6px; border-radius: 4px; font-size: 10px; font-bold; }
     </style>
   </head>
 
-  <body class="bg-gray-100 flex">
+  <body class="bg-gray-100 flex h-screen overflow-hidden">
     <aside class="w-14 bg-[#1e1e1e] flex flex-col items-center py-4 z-50">
       <div class="mb-8 text-blue-500">
         <span class="material-icons">layers</span>
       </div>
-      <div class="sidebar-icon text-white bg-blue-600 rounded">
-        <span class="material-icons">dashboard</span>
-      </div>
-      <div class="sidebar-icon"><span class="material-icons">map</span></div>
-      <div class="sidebar-icon">
+
+      <a
+        href="index.html"
+        class="p-2 mb-4 text-white bg-blue-600 rounded shadow-lg shadow-blue-900/50"
+      >
+        <span class="material-icons">home</span>
+      </a>
+
+      <a
+        href="profileuko.html"
+        class="p-2 mb-4 text-gray-400 hover:text-white transition-colors"
+      >
+        <span class="material-icons">filter_alt</span>
+      </a>
+
+      <a class="p-2 mb-4 text-gray-400 hover:text-white">
         <span class="material-icons">business</span>
-      </div>
-      <div class="sidebar-icon">
-        <span class="material-icons">assessment</span>
-      </div>
-      <div class="mt-auto sidebar-icon">
+      </a>
+
+      <div class="mt-auto p-2 text-gray-500 hover:text-white">
         <span class="material-icons">settings</span>
       </div>
     </aside>
@@ -135,13 +62,39 @@
       <header
         class="h-12 bg-white border-b flex items-center justify-between px-4"
       >
-        <span class="text-blue-800 font-bold"
-          >BRImaps <span class="text-gray-400 font-normal">v2</span></span
-        >
+        <span class="text-blue-800 font-bold">
+          BRImaps <span class="text-gray-400 font-normal">v2</span>
+        </span>
         <div class="flex items-center gap-2 text-xs">
           <div class="text-right">
             <p class="font-bold">Team CLO</p>
             <p class="text-gray-400">clo@bankbri.co.id</p>
+            <div class="flex gap-2 mt-1">
+              <button
+                onclick="togglePolygonRegion()"
+                class="bg-blue-100 px-1 rounded text-[10px]"
+              >
+                Region
+              </button>
+              <button
+                onclick="togglePolygonArea()"
+                class="bg-blue-100 px-1 rounded text-[10px]"
+              >
+                Area
+              </button>
+              <button
+                onclick="togglePolygonKab()"
+                class="bg-blue-100 px-1 rounded text-[10px]"
+              >
+                Kab
+              </button>
+              <button
+                onclick="toggleMarker()"
+                class="bg-blue-100 px-1 rounded text-[10px]"
+              >
+                Pinpoint
+              </button>
+            </div>
           </div>
           <div
             class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center"
@@ -156,29 +109,21 @@
           Distribution Channel Dashboard
         </h1>
         <div class="grid grid-cols-4 gap-4">
-          <div class="border rounded overflow-hidden">
+          <div class="metric-card">
             <div class="bg-[#004a99] metric-label">Kantor Cabang</div>
-            <div class="p-2 text-center text-2xl font-bold text-blue-900">
-              454
-            </div>
+            <div class="metric-value text-blue-900">999999</div>
           </div>
-          <div class="border rounded overflow-hidden">
+          <div class="metric-card">
             <div class="bg-[#f37021] metric-label">KCP</div>
-            <div class="p-2 text-center text-2xl font-bold text-orange-600">
-              555
-            </div>
+            <div class="metric-value text-orange-600">99999</div>
           </div>
-          <div class="border rounded overflow-hidden">
+          <div class="metric-card">
             <div class="bg-[#00c853] metric-label">Unit</div>
-            <div class="p-2 text-center text-2xl font-bold text-green-600">
-              5.1k
-            </div>
+            <div class="metric-value text-green-600">99999</div>
           </div>
-          <div class="border rounded overflow-hidden">
+          <div class="metric-card">
             <div class="bg-[#6a1b9a] metric-label">Kantor Kas</div>
-            <div class="p-2 text-center text-2xl font-bold text-purple-800">
-              491
-            </div>
+            <div class="metric-value text-purple-800">99999</div>
           </div>
         </div>
       </div>
@@ -205,189 +150,181 @@
         </div>
 
         <div class="flex bg-gray-100 px-6 text-sm">
-          <button class="tab-active px-5 py-3">Informasi</button>
-          <button class="px-5 py-3 text-gray-600">E-Channel</button>
-          <button class="px-5 py-3 text-gray-600">Performance & Potensi</button>
-          <button class="px-5 py-3 text-gray-600">Human Capital</button>
-          <button class="px-5 py-3 text-gray-600">Customer</button>
+          <button
+            class="tab-btn tab-active px-5 py-3"
+            data-tab-target="informasi"
+          >
+            Informasi
+          </button>
+          <button
+            class="tab-btn px-5 py-3 text-gray-600"
+            data-tab-target="echannel"
+          >
+            E-Channel
+          </button>
+          <button
+            class="tab-btn px-5 py-3 text-gray-600"
+            data-tab-target="performance"
+          >
+            Performance & Potensi
+          </button>
+          <button class="tab-btn px-5 py-3 text-gray-600" data-tab-target="hc">
+            Human Capital
+          </button>
+          <button
+            class="tab-btn px-5 py-3 text-gray-600"
+            data-tab-target="customer"
+          >
+            Customer
+          </button>
         </div>
 
         <div class="flex-1 overflow-y-auto bg-gray-50 p-6">
-          <div class="bg-white rounded-lg shadow p-6 flex gap-6">
-            <div class="flex-1 space-y-6">
-              <div>
-                <span
-                  class="inline-block bg-gray-200 text-xs font-bold px-3 py-1 rounded mb-3"
-                  >Identitas</span
-                >
-                <table class="text-sm w-full leading-7">
-                  <tr>
-                    <td class="w-52 text-gray-500">Nama Unit Kerja</td>
-                    <td>: <span id="m-name"></span></td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Branch Code</td>
-                    <td>: <span id="m-code"></span></td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Kelas</td>
-                    <td>: IIA</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Klasifikasi Wilayah</td>
-                    <td>: Urban</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Branch Type</td>
-                    <td>: Kantor Cabang</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">KC Supervisi</td>
-                    <td>: KC Siak</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Region</td>
-                    <td>: Region 2 – Pekanbaru</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Area</td>
-                    <td>: Area Siak</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Koordinat</td>
-                    <td>: 0.798317, 102.049247</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Alamat</td>
-                    <td>: Jl. Raja Kecik RT.12 RW.4</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Desa</td>
-                    <td>: Kampung Dalam</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Kecamatan</td>
-                    <td>: Kec. Siak</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Kota/Kab.</td>
-                    <td>: Kab. Siak</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Provinsi</td>
-                    <td>: Riau</td>
-                  </tr>
-                </table>
-              </div>
+          <div class="tab-content" data-tab="informasi">
+            <div class="bg-white rounded-lg shadow p-6 flex gap-6">
+              <div class="flex-1 space-y-6">
+                <div>
+                  <span
+                    class="inline-block bg-gray-200 text-xs font-bold px-3 py-1 rounded mb-3"
+                    >Identitas</span
+                  >
+                  <table class="text-sm w-full leading-7" id="table-identitas">
+                    <tr>
+                      <td class="w-52 text-gray-500">Nama Unit Kerja</td>
+                      <td>: <span id="m-name"></span></td>
+                    </tr>
+                    <tr>
+                      <td class="text-gray-500">Branch Code</td>
+                      <td>: <span id="m-code"></span></td>
+                    </tr>
+                    <tr>
+                      <td class="text-gray-500">Kelas</td>
+                      <td id="m-kelas">: -</td>
+                    </tr>
+                    <tr>
+                      <td class="text-gray-500">Klasifikasi Wilayah</td>
+                      <td id="m-klasifikasi">: -</td>
+                    </tr>
+                    <tr>
+                      <td class="text-gray-500">Branch Type</td>
+                      <td id="m-type">: -</td>
+                    </tr>
+                    <tr>
+                      <td class="text-gray-500">KC Supervisi</td>
+                      <td id="m-supervisi">: -</td>
+                    </tr>
+                    <tr>
+                      <td class="text-gray-500">Region</td>
+                      <td id="m-region">: -</td>
+                    </tr>
+                    <tr>
+                      <td class="text-gray-500">Area</td>
+                      <td id="m-area">: -</td>
+                    </tr>
+                    <tr>
+                      <td class="text-gray-500">Koordinat</td>
+                      <td id="m-koordinat">: -</td>
+                    </tr>
+                    <tr>
+                      <td class="text-gray-500">Alamat</td>
+                      <td id="m-alamat">: -</td>
+                    </tr>
+                  </table>
+                </div>
 
-              <div>
-                <span
-                  class="inline-block bg-gray-200 text-xs font-bold px-3 py-1 rounded mb-3"
-                  >Format Branch</span
-                >
-                <table class="text-sm w-full leading-7">
-                  <tr>
-                    <td class="w-52 font-semibold">Konvensional</td>
-                    <td>: Tidak</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Senyum</td>
-                    <td>: Tidak</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">PNM</td>
-                    <td>: Tidak</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Pegadaian</td>
-                    <td>: Tidak</td>
-                  </tr>
-                  <tr>
-                    <td class="w-52 font-semibold">Hybrid</td>
-                    <td>: Ya</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">QMS</td>
-                    <td>: Tidak</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Digital CS</td>
-                    <td>: Ya</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">Community Branch</td>
-                    <td>: Tidak</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">BRIWork</td>
-                    <td>: Tidak</td>
-                  </tr>
-                  <tr>
-                    <td class="text-gray-500">BRICafe</td>
-                    <td>: Tidak</td>
-                  </tr>
-                  <tr>
-                    <td class="w-52 font-semibold">Digital Branch</td>
-                    <td>: Ya</td>
-                  </tr>
-                </table>
+                <div>
+                  <span
+                    class="inline-block bg-gray-200 text-xs font-bold px-3 py-1 rounded mb-3"
+                    >Format Branch</span
+                  >
+                  <div
+                    class="grid grid-cols-2 gap-2 text-sm"
+                    id="m-format-list"
+                  ></div>
+                </div>
               </div>
-
-              <div>
-                <span
-                  class="inline-block bg-gray-200 text-xs font-bold px-3 py-1 rounded mb-3"
-                  >Kepemilikan Gedung</span
-                >
-                <table class="text-sm w-full leading-7">
-                  <tr>
-                    <td class="w-52 text-gray-500">Jenis Kepemilikan</td>
-                    <td class="w-4">:</td>
-                    <td>Sewa</td>
-                  </tr>
-                  <tr>
-                    <td class="w-52 text-gray-500">Harga Sewa / Tahun</td>
-                    <td class="w-4">:</td>
-                    <td>Rp 180.000.000</td>
-                  </tr>
-                  <tr>
-                    <td class="w-52 text-gray-500">Jatuh Tempo</td>
-                    <td class="w-4">:</td>
-                    <td>Februari 2030</td>
-                  </tr>
-                </table>
-              </div>
-
-              <div>
-                <span
-                  class="inline-block bg-gray-200 text-xs font-bold px-3 py-1 rounded mb-3"
-                  >Uko Supervisi</span
-                >
-                <table class="text-sm w-full leading-7">
-                  <tr>
-                    <td class="w-52 font-semibold">Konvensional</td>
-                    <td>: Tidak</td>
-                  </tr>
-                  <tr>
-                    <td class="font-semibold">Senyum</td>
-                    <td>: Tidak</td>
-                  </tr>
-                  <tr>
-                    <td class="font-semibold">PNM</td>
-                    <td>: Tidak</td>
-                  </tr>
-                  <tr>
-                    <td class="font-semibold">Pegadaian</td>
-                    <td>: Tidak</td>
-                  </tr>
-                </table>
+              <div class="w-72 flex-shrink-0">
+                <img
+                  src="https://fastly.4sqi.net/img/general/600x600/51253634_yN_O-f9TjNqW9p97Wz3mUv0-9G-8UvIu-9kY0_Yw.jpg"
+                  class="rounded border w-full h-44 object-cover"
+                />
+                <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                  <p class="text-xs font-bold text-blue-800 uppercase mb-2">
+                    Kepemilikan Gedung
+                  </p>
+                  <p class="text-sm">
+                    Status: <span id="m-gedung-jenis" class="font-bold">-</span>
+                  </p>
+                  <p class="text-sm">
+                    Harga: <span id="m-gedung-harga" class="font-bold">-</span>
+                  </p>
+                  <p class="text-sm">
+                    Jatuh Tempo:
+                    <span id="m-gedung-tempo" class="font-bold">-</span>
+                  </p>
+                </div>
               </div>
             </div>
+          </div>
 
-            <div class="w-72 flex-shrink-0">
-              <img
-                src="https://fastly.4sqi.net/img/general/600x600/51253634_yN_O-f9TjNqW9p97Wz3mUv0-9G-8UvIu-9kY0_Yw.jpg"
-                class="rounded border w-full h-44 object-cover"
-              />
+          <div class="tab-content hidden" data-tab="echannel">
+            <div class="grid grid-cols-3 gap-4" id="echannel-container"></div>
+          </div>
+
+          <div class="tab-content hidden" data-tab="performance">
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex justify-between items-center mb-6">
+                <h3 class="font-bold text-lg">Key Performance Indicator</h3>
+                <div class="text-right">
+                  <p class="text-3xl font-bold text-blue-600" id="m-perf-kpi">
+                    -
+                  </p>
+                  <p class="text-xs text-gray-400">Score Performance</p>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-6">
+                <div class="p-4 border rounded">
+                  <p class="text-sm font-bold mb-2">Market Share DPK</p>
+                  <div class="text-2xl font-bold" id="m-perf-dpk">- %</div>
+                </div>
+                <div class="p-4 border rounded">
+                  <p class="text-sm font-bold mb-2">NPL</p>
+                  <div class="text-2xl font-bold text-red-600" id="m-perf-npl">
+                    - %
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content hidden" data-tab="hc">
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="px-4 py-2 text-left">Jabatan</th>
+                    <th class="px-4 py-2 text-center">Formasi</th>
+                    <th class="px-4 py-2 text-center">Pemenuhan</th>
+                    <th class="px-4 py-2 text-center">Gap</th>
+                  </tr>
+                </thead>
+                <tbody id="m-hc-table"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tab-content hidden" data-tab="customer">
+            <div class="grid grid-cols-2 gap-6">
+              <div class="bg-white p-6 rounded-lg shadow text-center">
+                <p class="text-gray-500 text-sm">Total CIF</p>
+                <p class="text-4xl font-bold text-blue-900" id="m-cust-total">
+                  -
+                </p>
+              </div>
+              <div class="bg-white p-6 rounded-lg shadow">
+                <p class="font-bold mb-4">Demografi Generasi</p>
+                <div id="m-cust-gen" class="space-y-2 text-sm"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -395,83 +332,7 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <script>
-      const map = L.map("map").setView([0.79, 102.02], 10);
-
-      L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        {
-          attribution: "© OpenStreetMap",
-        }
-      ).addTo(map);
-
-      // Data ditambahkan field info tambahan untuk popup
-      const branchData = [
-        {
-          name: "KC Siak",
-          code: "1190",
-          region: "Region 2 – Pekanbaru",
-          type: "Kantor Cabang",
-          address: "Jl. Raja Kecik RT.12 RW.4",
-          pos: [0.798317, 102.049247],
-          color: "#1e3a8a",
-        },
-        {
-          name: "KC Perawang",
-          code: "1234",
-          region: "Region 2 – Pekanbaru",
-          type: "Kantor Cabang",
-          address: "Jl. Raya Perawang No. 10",
-          pos: [0.68, 101.62],
-          color: "#1e3a8a",
-        },
-      ];
-
-      function openModal(name, code) {
-        document.getElementById("modalBranchName").innerText = name;
-        document.getElementById("m-name").innerText = name;
-        document.getElementById("m-code").innerText = code;
-        document.getElementById("detailModal").classList.remove("hidden");
-      }
-
-      function closeModal() {
-        document.getElementById("detailModal").classList.add("hidden");
-      }
-
-      branchData.forEach((item) => {
-        const marker = L.circleMarker(item.pos, {
-          radius: 8,
-          fillColor: item.color,
-          color: "#fff",
-          weight: 2,
-          fillOpacity: 1,
-        }).addTo(map);
-
-        // --- POPUP IMPROVED (ESRI STYLE TABLE) ---
-        const popupContent = `
-          <table class="esri-table">
-            <tbody>
-              <tr><th>Region</th><td>${item.region}</td></tr>
-              <tr><th>Kode Uker</th><td>${item.code}</td></tr>
-              <tr><th>Nama Uker</th><td>${item.name}</td></tr>
-              <tr><th>Jenis Uker</th><td>${item.type}</td></tr>
-              <tr><th>Alamat</th><td>${item.address}</td></tr>
-            </tbody>
-          </table>
-          <div class="popup-footer">
-            <button class="popup-btn" onclick="openModal('${item.name}', '${item.code}')">
-              MORE INFO
-            </button>
-          </div>
-        `;
-
-        marker.bindPopup(popupContent);
-      });
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeModal();
-      });
-    </script>
+    <script src="branchdetail.js"></script>
+    <script src="js/script.js"></script>
   </body>
 </html>

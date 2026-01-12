@@ -1,0 +1,100 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+.sidebar-icon {
+  cursor: pointer;
+  padding: 12px;
+  color: #9ca3af;
+  transition: all 0.2s;
+}
+
+.sidebar-icon:hover {
+  background: #374151;
+  color: #fff;
+}
+
+.metric-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.metric-label {
+  font-size: 35px;
+  text-align: center;
+  font-weight: 700;
+  padding: 4px 12px;
+  color: #fff;
+}
+
+.metric-value {
+  padding: 8px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.tab-active {
+  border-bottom: 4px solid #00569c;
+  color: #00569c;
+  font-weight: bold;
+  background: #fff;
+}
+
+/* ESRI Popup Styling */
+.leaflet-popup-content-wrapper {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.leaflet-popup-content {
+  margin: 0 !important;
+  width: 300px !important;
+}
+
+.esri-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.esri-table tr:nth-child(odd) {
+  background-color: #fcfcfc;
+}
+.esri-table th {
+  text-align: left;
+  padding: 8px 10px;
+  background-color: #f3f3f3;
+  color: #555;
+  width: 40%;
+  border: 1px solid #eee;
+}
+.esri-table td {
+  padding: 8px 10px;
+  border: 1px solid #eee;
+}
+
+.popup-footer {
+  padding: 10px;
+  background: white;
+  text-align: center;
+}
+.popup-btn {
+  background-color: #1e40af;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}

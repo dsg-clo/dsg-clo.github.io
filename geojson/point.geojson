@@ -1,0 +1,70 @@
+{
+  "type": "FeatureCollection",
+  "name": "pinpoint",
+  "crs": {
+    "type": "name",
+    "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "Nama Uker": "KC Bangkinang",
+        "Jenis Uker": "KC",
+        "Koordinat": "0.336438, 101.022538",
+        "Kelas": "IIB",
+        "Alamat": "Jl. Jend Sudirman No 61",
+        "Kode Uker": 268,
+        "Desa": "Langgini",
+        "Kecamatan": "Bangkinang Kota",
+        "KabKot": "Kampar",
+        "Provinsi": "Riau",
+        "Region": "Region 2 - Regional Office Pekanbaru"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [101.022538, 0.336438, 0.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Nama Uker": "KC Bagansiapiapi",
+        "Jenis Uker": "KC",
+        "Koordinat": "2.160044, 100.808507",
+        "Kelas": "IIIB",
+        "Alamat": "Jl. Merdeka No. 43",
+        "Kode Uker": 2,
+        "Desa": "Bagan Kota",
+        "Kecamatan": "Bangko",
+        "KabKot": "Rokan Hilir",
+        "Provinsi": "Riau",
+        "Region": "Region 2 - Regional Office Pekanbaru"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [100.808507, 2.160044, 0.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Nama Uker": "KC Bagan Batu",
+        "Jenis Uker": "KC",
+        "Koordinat": "1.708847, 100.398426",
+        "Kelas": "IIIA",
+        "Alamat": "Jl. Sudirman Komplek Business Center No. A10-A13",
+        "Kode Uker": 619,
+        "Desa": "Bagan Batu Kota",
+        "Kecamatan": "Bagansinembah",
+        "KabKot": "Rokan Hilir",
+        "Provinsi": "Riau",
+        "Region": "Region 2 - Regional Office Pekanbaru"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [100.398426, 1.708847, 0.0]
+      }
+    }
+  ]
+}
