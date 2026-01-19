@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BRImaps v2 - Filter Profile Kabupaten</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <style>
+      select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+      .bg-gradient-custom {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 flex h-screen overflow-hidden">
+    <aside class="w-14 bg-[#1e1e1e] flex flex-col items-center py-4 z-50">
+      <div class="mb-8 text-blue-500">
+        <a href="index.html" class="mb-8 text-blue-500">
+          <span class="material-icons">layers</span>
+        </a>
+      </div>
+      <a
+        href="index.html"
+        class="p-2 mb-4 text-gray-400 hover:text-white transition-colors"
+      >
+        <span class="material-icons">home</span>
+      </a>
+      <a href="profileuko.html" class="p-2 mb-4 text-gray-400 hover:text-white">
+        <span class="material-icons">filter_alt</span>
+      </a>
+      <a
+        class="p-2 mb-4 text-white bg-blue-600 rounded shadow-lg shadow-blue-900/50"
+      >
+        <span class="material-icons">business</span>
+      </a>
+      <a
+        href=".html"
+        class="p-2 mb-4 text-gray-400 hover:text-white transition-colors"
+      >
+        <span class="material-icons"></span>
+      </a>
+    </aside>
+
+    <div class="flex-1 flex flex-col bg-gradient-custom">
+      <header
+        class="h-12 bg-white border-b flex items-center justify-between px-6 shadow-sm"
+      >
+        <span class="text-blue-800 font-bold tracking-tight">
+          BRImaps <span class="text-gray-400 font-normal">v2</span>
+        </span>
+      </header>
+
+      <div class="flex-1 flex items-center justify-center p-6">
+        <div
+          class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
+        >
+          <div class="bg-orange-600 p-6 text-white text-center">
+            <h1 class="text-2xl font-bold">Profile Kabupaten</h1>
+            <p class="text-orange-100 text-sm mt-1 font-light">
+              Pilih parameter wilayah untuk melihat laporan detail
+            </p>
+          </div>
+
+          <div class="p-8 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label
+                  class="block text-xs font-bold text-gray-500 uppercase ml-1"
+                  >Provinsi</label
+                >
+                <div class="relative">
+                  <select
+                    id="sel-prov"
+                    class="block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-orange-500 transition-all"
+                  >
+                    <option value="">Pilih Provinsi...</option>
+                    <option value="1">Riau</option>
+                  </select>
+                  <span
+                    class="material-icons absolute left-3 top-3 text-gray-400"
+                    >public</span
+                  >
+                  <span
+                    class="material-icons absolute right-3 top-3 text-gray-300"
+                    >expand_more</span
+                  >
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  class="block text-xs font-bold text-gray-500 uppercase ml-1"
+                  >Kota Kabupaten</label
+                >
+                <div class="relative">
+                  <select
+                    id="sel-kokab"
+                    class="block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-orange-500 transition-all"
+                  >
+                    <option value="">Pilih Kota/Kabupaten...</option>
+                    <option value="1">Kabupaten Siak</option>
+                  </select>
+                  <span
+                    class="material-icons absolute left-3 top-3 text-gray-400"
+                    >storefront</span
+                  >
+                  <span
+                    class="material-icons absolute right-3 top-3 text-gray-300"
+                    >expand_more</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-center pt-8">
+              <button
+                onclick="submitProfileUKO()"
+                class="flex items-center gap-3 bg-orange-600 hover:bg-orange-700 text-white px-12 py-4 rounded-2xl font-bold text-lg shadow-xl shadow-orange-200 transition-all active:scale-95"
+              >
+                <span class="material-icons">analytics</span> VIEW REPORT
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function submitProfileUKO() {
+        const prov = document.getElementById("sel-prov").value;
+        const kokab = document.getElementById("sel-kokab").value;
+
+        const params = new URLSearchParams();
+
+        /**
+         * LOGIKA PENGIRIMAN:
+         * 1. Jika Kota/Kabupaten dipilih (ID: 1), maka prioritaskan itu karena datanya
+         * ada di KOKAB_DETAIL_DATA.
+         * 2. Jika hanya Provinsi yang dipilih, bisa diarahkan ke data Region.
+         */
+        if (kokab) {
+          params.append("type", "KOKAB");
+          params.append("code", kokab);
+        } else if (prov) {
+          // Jika Anda ingin Provinsi Riau juga mengambil data dari Region 2
+          params.append("type", "REGION");
+          params.append("code", prov);
+        } else {
+          alert("Silakan pilih minimal satu parameter");
+          return;
+        }
+
+        // Redirect ke file detail
+        window.location.href = `kokab-detail.html?${params.toString()}`;
+      }
+    </script>
+  </body>
+</html>

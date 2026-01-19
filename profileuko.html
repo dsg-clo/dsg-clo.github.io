@@ -4,30 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BRImaps v2 - Filter Report</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-
     <style>
-      /* Custom dropdown arrow removal for cleaner look */
       select {
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
+      }
+      /* Style untuk dropdown yang mati agar terlihat jelas */
+      select:disabled {
+        cursor: not-allowed;
+        background-color: #f3f4f6;
+        color: #9ca3af;
       }
       .bg-gradient-custom {
         background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
       }
     </style>
   </head>
-
   <body class="bg-gray-100 flex h-screen overflow-hidden">
     <aside class="w-14 bg-[#1e1e1e] flex flex-col items-center py-4 z-50">
       <div class="mb-8 text-blue-500">
-        <span class="material-icons">layers</span>
+        <a href="index.html" class="mb-8 text-blue-500">
+          <span class="material-icons">layers</span>
+        </a>
       </div>
       <a
         href="index.html"
@@ -40,12 +44,9 @@
       >
         <span class="material-icons">filter_alt</span>
       </a>
-      <a class="p-2 mb-4 text-gray-400 hover:text-white">
+      <a href="profilekab.html" class="p-2 mb-4 text-gray-400 hover:text-white">
         <span class="material-icons">business</span>
       </a>
-      <div class="mt-auto p-2 text-gray-500">
-        <span class="material-icons">settings</span>
-      </div>
     </aside>
 
     <div class="flex-1 flex flex-col bg-gradient-custom">
@@ -55,177 +56,240 @@
         <span class="text-blue-800 font-bold tracking-tight">
           BRImaps <span class="text-gray-400 font-normal">v2</span>
         </span>
-        <div class="flex items-center gap-3">
-          <div class="text-right hidden sm:block">
-            <p
-              class="text-[10px] font-bold text-gray-800 leading-none uppercase"
-            >
-              Team CLO
-            </p>
-            <p class="text-[9px] text-gray-400">clo@bankbri.co.id</p>
-          </div>
-          <div
-            class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-inner"
-          >
-            BRI
-          </div>
-        </div>
       </header>
 
       <div class="flex-1 flex items-center justify-center p-6">
         <div
-          class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl shadow-blue-900/10 border border-gray-100 overflow-hidden"
+          class="bg-white w-full max-w-5xl rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
         >
-          <div class="bg-blue-800 p-6 text-white text-center">
-            <h1 class="text-2xl font-bold">Laporan Profil UKO</h1>
-            <p class="text-blue-200 text-sm mt-1 font-light">
-              Silakan pilih parameter wilayah dan periode untuk melihat laporan
-            </p>
-          </div>
+          <div
+            class="bg-blue-800 p-8 text-white flex flex-col md:flex-row justify-between items-center gap-6"
+          >
+            <div class="text-center md:text-left">
+              <h1 class="text-2xl font-bold">Profile UKO</h1>
+              <p class="text-blue-200 text-sm mt-1 font-light">
+                Pilih parameter untuk melihat laporan detail
+              </p>
+            </div>
 
-          <div class="p-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div class="space-y-2">
-                <label
-                  class="block text-xs font-bold text-gray-500 uppercase tracking-wider ml-1"
-                  >Kanwil</label
+            <div class="w-full md:w-72">
+              <label
+                class="block text-[10px] font-bold text-blue-200 uppercase mb-1 ml-1"
+                >Pilih Level Laporan</label
+              >
+              <div class="relative">
+                <select
+                  id="sel-level"
+                  onchange="handleLevelChange()"
+                  class="block w-full pl-10 pr-10 py-3 bg-white/10 border border-white/20 rounded-xl outline-none focus:bg-white focus:text-gray-800 transition-all text-white font-bold cursor-pointer"
                 >
-                <div class="relative group">
-                  <div
-                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                  >
-                    <span
-                      class="material-icons text-gray-400 group-focus-within:text-blue-500 transition-colors"
-                      >account_balance</span
-                    >
-                  </div>
+                  <option class="text-gray-800" value="">
+                    -- Pilih Level --
+                  </option>
+                  <option class="text-gray-800" value="REGION">Region</option>
+                  <option class="text-gray-800" value="AREA">Area</option>
+                  <option class="text-gray-800" value="KC">
+                    Kantor Cabang Konsol (KC Konsol)
+                  </option>
+                  <option class="text-gray-800" value="UKER">
+                    Unit Kerja Operasional (UKO)
+                  </option>
+                </select>
+                <span class="material-icons absolute left-3 top-3 text-blue-200"
+                  >segment</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="p-8 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div
+                class="space-y-2 opacity-50 transition-opacity"
+                id="wrapper-region"
+              >
+                <label
+                  class="block text-xs font-bold text-gray-500 uppercase ml-1"
+                  >Region</label
+                >
+                <div class="relative">
                   <select
-                    class="block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all cursor-pointer text-gray-700 font-medium hover:bg-white"
+                    id="sel-region"
+                    disabled
+                    class="block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Pilih Kanwil...</option>
-                    <option value="1">Kanwil Jakarta</option>
-                    <option value="2">Kanwil Pekanbaru</option>
+                    <option value="">Pilih Region...</option>
+                    <option value="2">Region 2 - Pekanbaru</option>
                   </select>
-                  <div
-                    class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
+                  <span
+                    class="material-icons absolute left-3 top-3 text-gray-400"
+                    >account_balance</span
                   >
-                    <span class="material-icons text-gray-400"
-                      >expand_more</span
-                    >
-                  </div>
+                </div>
+              </div>
+              <div
+                class="space-y-2 opacity-50 transition-opacity"
+                id="wrapper-area"
+              >
+                <label
+                  class="block text-xs font-bold text-gray-500 uppercase ml-1"
+                  >Area</label
+                >
+                <div class="relative">
+                  <select
+                    id="sel-area"
+                    disabled
+                    class="block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Pilih Area...</option>
+                    <option value="1">Area Riau</option>
+                  </select>
+                  <span
+                    class="material-icons absolute left-3 top-3 text-gray-400"
+                    >map</span
+                  >
                 </div>
               </div>
 
-              <div class="space-y-2">
+              <div
+                class="space-y-2 opacity-50 transition-opacity"
+                id="wrapper-kanca"
+              >
                 <label
-                  class="block text-xs font-bold text-gray-500 uppercase tracking-wider ml-1"
-                  >Kantor Cabang (Kanca)</label
+                  class="block text-xs font-bold text-gray-500 uppercase ml-1"
+                  >Kantor Cabang</label
                 >
-                <div class="relative group">
-                  <div
-                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                  >
-                    <span
-                      class="material-icons text-gray-400 group-focus-within:text-blue-500 transition-colors"
-                      >storefront</span
-                    >
-                  </div>
+                <div class="relative">
                   <select
-                    class="block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all cursor-pointer text-gray-700 font-medium hover:bg-white"
+                    id="sel-kanca"
+                    disabled
+                    class="block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Pilih Kanca...</option>
                     <option value="1190">KC Siak</option>
                     <option value="1234">KC Perawang</option>
                   </select>
-                  <div
-                    class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
+                  <span
+                    class="material-icons absolute left-3 top-3 text-gray-400"
+                    >storefront</span
                   >
-                    <span class="material-icons text-gray-400"
-                      >expand_more</span
-                    >
-                  </div>
                 </div>
               </div>
 
-              <div class="space-y-2">
+              <div
+                class="space-y-2 opacity-50 transition-opacity"
+                id="wrapper-uker"
+              >
                 <label
-                  class="block text-xs font-bold text-gray-500 uppercase tracking-wider ml-1"
-                  >Unit Kerja (UKER)</label
+                  class="block text-xs font-bold text-gray-500 uppercase ml-1"
+                  >Unit Kerja Operasional (UKO)</label
                 >
-                <div class="relative group">
-                  <div
-                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                  >
-                    <span
-                      class="material-icons text-gray-400 group-focus-within:text-blue-500 transition-colors"
-                      >hub</span
-                    >
-                  </div>
+                <div class="relative">
                   <select
-                    class="block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all cursor-pointer text-gray-700 font-medium hover:bg-white"
+                    id="sel-uker"
+                    disabled
+                    class="block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Pilih UKER...</option>
+                    <option value="">Pilih UKO...</option>
+                    <option value="U1">BRI Unit Dayun</option>
                   </select>
-                  <div
-                    class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
+                  <span
+                    class="material-icons absolute left-3 top-3 text-gray-400"
+                    >hub</span
                   >
-                    <span class="material-icons text-gray-400"
-                      >expand_more</span
-                    >
-                  </div>
-                </div>
-              </div>
-
-              <div class="space-y-2 md:col-span-3">
-                <label
-                  class="block text-xs font-bold text-gray-500 uppercase tracking-wider ml-1"
-                  >Periode Bulan</label
-                >
-                <div class="relative group max-w-sm">
-                  <div
-                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                  >
-                    <span
-                      class="material-icons text-gray-400 group-focus-within:text-blue-500 transition-colors"
-                      >calendar_month</span
-                    >
-                  </div>
-                  <select
-                    class="block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all cursor-pointer text-gray-700 font-medium hover:bg-white"
-                  >
-                    <option value="1">Januari 2026</option>
-                    <option value="2">Februari 2026</option>
-                  </select>
-                  <div
-                    class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
-                  >
-                    <span class="material-icons text-gray-400"
-                      >expand_more</span
-                    >
-                  </div>
                 </div>
               </div>
             </div>
 
-            <div
-              class="mt-10 flex justify-center border-t border-gray-100 pt-8"
-            >
+            <div class="flex justify-center pt-8 border-t border-gray-100">
               <button
-                onclick="window.location.href='index.html'"
-                class="flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-12 py-4 rounded-2xl font-bold text-lg transition-all transform hover:scale-105 active:scale-95 shadow-xl shadow-blue-500/30"
+                onclick="submitProfileUKO()"
+                class="flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-16 py-4 rounded-2xl font-bold text-lg shadow-xl transition-transform active:scale-95"
               >
-                <span class="material-icons">analytics</span>
-                VIEW REPORT
+                <span class="material-icons">analytics</span> VIEW REPORT
               </button>
             </div>
           </div>
         </div>
       </div>
-
-      <footer class="p-4 text-center text-gray-400 text-[10px]">
-        &copy; 2026 PT. Bank Rakyat Indonesia (Persero) Tbk. All Rights
-        Reserved.
-      </footer>
     </div>
+
+    <script>
+      const selects = {
+        region: document.getElementById("sel-region"),
+        area: document.getElementById("sel-area"),
+        kanca: document.getElementById("sel-kanca"),
+        uker: document.getElementById("sel-uker"),
+      };
+
+      const wrappers = {
+        region: document.getElementById("wrapper-region"),
+        area: document.getElementById("wrapper-area"),
+        kanca: document.getElementById("wrapper-kanca"),
+        uker: document.getElementById("wrapper-uker"),
+      };
+
+      function resetFilters() {
+        Object.keys(selects).forEach((key) => {
+          selects[key].disabled = true;
+          selects[key].value = "";
+          wrappers[key].classList.add("opacity-50");
+        });
+      }
+
+      function handleLevelChange() {
+        const level = document.getElementById("sel-level").value;
+        resetFilters();
+
+        if (!level) return;
+
+        // Logika Cascading Enable
+        if (level === "REGION") {
+          enable("region");
+        } else if (level === "AREA") {
+          enable("region");
+          enable("area");
+        } else if (level === "KC") {
+          enable("region");
+          enable("area");
+          enable("kanca");
+        } else if (level === "UKER") {
+          enable("region");
+          enable("area");
+          enable("kanca");
+          enable("uker");
+        }
+      }
+
+      function enable(key) {
+        selects[key].disabled = false;
+        wrappers[key].classList.remove("opacity-50");
+      }
+
+      function submitProfileUKO() {
+        const level = document.getElementById("sel-level").value;
+        if (!level) {
+          alert("Silakan pilih Level Laporan terlebih dahulu");
+          return;
+        }
+
+        // Ambil code berdasarkan level yang dipilih
+        let code = "";
+        if (level === "REGION") code = selects.region.value;
+        else if (level === "AREA") code = selects.area.value;
+        else if (level === "KC") code = selects.kanca.value;
+        else if (level === "UKER") code = selects.uker.value;
+
+        if (!code) {
+          alert(`Silakan lengkapi pilihan data untuk level ${level}`);
+          return;
+        }
+
+        const params = new URLSearchParams();
+        params.append("type", level);
+        params.append("code", code);
+
+        window.location.href = `branch-detail.html?${params.toString()}`;
+      }
+    </script>
   </body>
 </html>

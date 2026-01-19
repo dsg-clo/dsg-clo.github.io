@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kabupaten Detail Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .tab-active {
+        background-color: #1e40af !important;
+        color: white !important;
+        border-radius: 8px 8px 0 0;
+        font-weight: bold;
+      }
+      .bg-card-blue {
+        background-color: #f0f7ff;
+      }
+      .bg-card-green {
+        background-color: #f0fff4;
+      }
+      .badge-white {
+        background: white;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 10px;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <header
+      class="bg-white border-b px-8 py-4 flex justify-between items-center shadow-sm"
+    >
+      <div>
+        <h1 class="text-2xl font-black text-blue-900" id="pageTitle">
+          Loading...
+        </h1>
+        <p
+          class="text-gray-400 text-xs uppercase tracking-widest"
+          id="pageSubtitle"
+        >
+          Laporan Profil Wilayah
+        </p>
+      </div>
+      <a
+        href="profilekab.html"
+        class="flex items-center gap-2 text-blue-600 font-bold hover:underline"
+      >
+        <span class="material-icons">arrow_back</span> Back to Filter
+      </a>
+    </header>
+
+    <nav
+      class="flex bg-white px-8 border-b sticky top-0 z-10 overflow-x-auto no-scrollbar"
+    >
+      <button
+        class="tab-btn tab-active px-6 py-4 whitespace-nowrap"
+        data-target="tab-info"
+      >
+        Informasi & Demografi
+      </button>
+      <button
+        class="tab-btn px-6 py-4 text-gray-500 whitespace-nowrap"
+        data-target="tab-echannel"
+      >
+        E-Channel
+      </button>
+      <button
+        class="tab-btn px-6 py-4 text-gray-500 whitespace-nowrap"
+        data-target="tab-perf"
+      >
+        Performance
+      </button>
+      <button
+        class="tab-btn px-6 py-4 text-gray-500 whitespace-nowrap"
+        data-target="tab-hc"
+      >
+        Human Capital
+      </button>
+      <button
+        class="tab-btn px-6 py-4 text-gray-500 whitespace-nowrap"
+        data-target="tab-customer"
+      >
+        Customer
+      </button>
+    </nav>
+
+    <main class="p-8 max-w-7xl mx-auto">
+      <section id="tab-info" class="tab-content space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div
+            class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"
+          >
+            <h3
+              class="text-lg font-bold mb-4 flex items-center gap-2 text-blue-800"
+            >
+              <span class="material-icons">info</span> Detail Administrasi
+            </h3>
+            <table class="w-full text-sm leading-10">
+              <tbody id="info-table" class="text-gray-700"></tbody>
+            </table>
+          </div>
+          <div
+            class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"
+          >
+            <h3
+              class="text-lg font-bold mb-4 flex items-center gap-2 text-blue-800"
+            >
+              <span class="material-icons">analytics</span> Pesaing & Populasi
+            </h3>
+            <div class="grid grid-cols-2 gap-4" id="demografi-grid"></div>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+          <h3
+            class="text-lg font-bold mb-4 flex items-center gap-2 text-blue-800"
+          >
+            <span class="material-icons">business</span> Sebaran UKO Supervisi
+          </h3>
+          <div
+            class="grid grid-cols-2 md:grid-cols-5 gap-4"
+            id="uko-grid"
+          ></div>
+        </div>
+      </section>
+
+      <section id="tab-echannel" class="tab-content hidden space-y-6">
+        <div id="premises-container"></div>
+        <div
+          id="echannel-grid"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+        ></div>
+      </section>
+
+      <section id="tab-perf" class="tab-content hidden">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div
+            class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-blue-600 text-center"
+          >
+            <p class="text-gray-500 text-xs font-bold uppercase">KPI Score</p>
+            <h2 id="perf-kpi" class="text-4xl font-black text-blue-900 mt-2">
+              -
+            </h2>
+          </div>
+          <div
+            class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-green-500 text-center"
+          >
+            <p class="text-gray-500 text-xs font-bold uppercase">
+              M. Share DPK
+            </p>
+            <h2 id="perf-dpk" class="text-4xl font-black text-green-600 mt-2">
+              -
+            </h2>
+          </div>
+          <div
+            class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-red-500 text-center"
+          >
+            <p class="text-gray-500 text-xs font-bold uppercase">NPL Ratio</p>
+            <h2 id="perf-npl" class="text-4xl font-black text-red-600 mt-2">
+              -
+            </h2>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-hc" class="tab-content hidden space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div
+            class="bg-card-green p-6 rounded-xl shadow-sm border border-green-100 text-center"
+          >
+            <h4 class="text-gray-700 font-bold mb-4">Jumlah Formasi</h4>
+            <p id="total-formasi" class="text-4xl font-black text-gray-800">
+              0
+            </p>
+          </div>
+          <div
+            class="bg-card-green p-6 rounded-xl shadow-sm border border-green-100 text-center"
+          >
+            <h4 class="text-gray-700 font-bold mb-4">Jumlah Pemenuhan</h4>
+            <p id="total-pemenuhan" class="text-4xl font-black text-gray-800">
+              0
+            </p>
+          </div>
+          <div
+            class="bg-card-green p-6 rounded-xl shadow-sm border border-green-100 text-center"
+          >
+            <h4 class="text-gray-700 font-bold mb-4">Gap</h4>
+            <p id="total-gap" class="text-4xl font-black text-red-600">0</p>
+          </div>
+        </div>
+        <div
+          class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+        >
+          <table class="w-full text-left border-collapse">
+            <thead
+              class="bg-gray-50 text-gray-400 text-[10px] font-black uppercase border-b"
+            >
+              <tr>
+                <th class="px-8 py-4">Jenis Formasi</th>
+                <th class="px-8 py-4 text-center">Formasi</th>
+                <th class="px-8 py-4 text-center">Pemenuhan</th>
+                <th class="px-8 py-4 text-center">Gap</th>
+              </tr>
+            </thead>
+            <tbody id="hc-table-body" class="divide-y text-sm"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="tab-customer" class="tab-content hidden space-y-6">
+        <div
+          class="bg-gradient-to-r from-blue-900 to-blue-700 p-10 rounded-3xl text-white shadow-xl flex justify-between items-center relative overflow-hidden"
+        >
+          <div class="relative z-10">
+            <p
+              class="text-blue-100 text-xs font-black uppercase tracking-[0.2em]"
+            >
+              Total CIF Nasabah Wilayah Kota Kabupaten
+            </p>
+            <h2 id="cust-total" class="text-5xl font-black mt-2">0</h2>
+          </div>
+          <span class="material-icons text-7xl opacity-20">groups</span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border">
+          <h3 class="text-lg font-bold mb-6 text-gray-800 border-b pb-4">
+            Demografi Per Generasi
+          </h3>
+          <div
+            id="cust-gen-container"
+            class="grid grid-cols-1 sm:grid-cols-3 gap-6"
+          ></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="branchdetail.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code") || "1"; // Default ke 1 jika tidak ada code
+
+        const data = KOKAB_DETAIL_DATA[code];
+
+        if (!data) {
+          document.body.innerHTML = `<div class="p-20 text-center text-gray-500 font-bold">Data dengan Code: ${code} Tidak Ditemukan</div>`;
+          return;
+        }
+
+        const id = data.identkab || data.identreg;
+
+        // 1. Header
+        document.getElementById("pageTitle").innerText = (
+          id.nama_kab ||
+          id.nama_unit_kerja ||
+          "DETAIL WILAYAH"
+        ).toUpperCase();
+        document.getElementById("pageSubtitle").innerText = `Provinsi ${
+          id.provinsi || "-"
+        } | ${id.area || id.region_supervisi || "-"}`;
+
+        // 2. Administrasi
+        const infoTable = document.getElementById("info-table");
+        const infoItems = {
+          "Nama Kota/Kab": id.nama_kab || id.nama_unit_kerja,
+          Klasifikasi: id.klasifikasi_wilayah,
+          Area: id.area || "-",
+          Provinsi: id.provinsi,
+          Region: id.region_supervisi || id.region,
+        };
+        Object.entries(infoItems).forEach(([k, v]) => {
+          infoTable.innerHTML += `<tr><td class="font-bold text-gray-400 w-40">${k}</td><td>: ${
+            v || "-"
+          }</td></tr>`;
+        });
+
+        // 3. Demografi (Pesaing) - Clear existing before loop
+        const demoGrid = document.getElementById("demografi-grid");
+        demoGrid.innerHTML = "";
+        if (data.demografi) {
+          Object.entries(data.demografi).forEach(([k, v]) => {
+            demoGrid.innerHTML += `<div class="bg-gray-50 p-4 rounded-xl border text-center">
+                <p class="text-[10px] font-bold text-gray-400 uppercase">${k.replace(
+                  /_/g,
+                  " "
+                )}</p>
+                <p class="text-xl font-black text-blue-900 mt-1">${v}</p>
+            </div>`;
+          });
+        }
+
+        // 4. UKO Supervisi
+        const ukoGrid = document.getElementById("uko-grid");
+        ukoGrid.innerHTML = "";
+        if (data.uko_supervisi) {
+          Object.entries(data.uko_supervisi).forEach(([k, v]) => {
+            ukoGrid.innerHTML += `<div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-center">
+                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">${k.replace(
+                  /_/g,
+                  " "
+                )}</p>
+                <p class="text-2xl font-black text-blue-600">${v.jumlah}</p>
+            </div>`;
+          });
+        }
+
+        // 5. E-Channel & Premises
+        const kpi = data.performance_potensi.kpi;
+        document.getElementById("premises-container").innerHTML = `
+            <div class="bg-card-green p-6 rounded-2xl shadow-sm border border-green-100 w-full sm:w-60">
+                <div class="flex justify-between items-start mb-4"><span class="text-sm font-black text-green-800 uppercase">Premises</span><span class="badge-white">Mei</span></div>
+                <h2 class="text-4xl font-black text-gray-800">${kpi.score}%</h2>
+                <p class="flex items-center gap-1 font-bold mt-2 ${
+                  kpi.trend < 0 ? "text-red-500" : "text-green-500"
+                } text-xs">
+                    <span class="material-icons text-sm">${
+                      kpi.trend < 0 ? "arrow_downward" : "arrow_upward"
+                    }</span> ${Math.abs(kpi.trend)}%
+                </p>
+            </div>`;
+
+        const ecGrid = document.getElementById("echannel-grid");
+        ecGrid.innerHTML = "";
+        const channels = [
+          { id: "atm", l: "ATM" },
+          { id: "crm", l: "CRM" },
+          { id: "edc", l: "EDC" },
+          { id: "qris", l: "QRIS" },
+          { id: "brilink", l: "Brilink" },
+        ];
+        channels.forEach((ch) => {
+          const item = data[ch.id];
+          if (item) {
+            ecGrid.innerHTML += `<div class="bg-card-blue p-5 rounded-2xl border border-blue-50">
+                    <div class="flex justify-between items-center mb-4"><span class="font-black text-blue-900 text-sm uppercase">${
+                      ch.l
+                    }</span><span class="badge-white">Mei</span></div>
+                    <div class="text-[11px] mb-4">
+                        <div class="flex justify-between"><span>Total</span><span class="font-bold">${
+                          item.jml
+                        }</span></div>
+                    </div>
+                    <div class="pt-2 border-t border-blue-100/50">
+                        <p class="text-[9px] text-gray-400 uppercase">Productivity</p>
+                        <p class="text-xl font-black text-gray-800">${
+                          item["prd" + ch.id] || item.prd || "0%"
+                        }</p>
+                    </div>
+                </div>`;
+          }
+        });
+
+        // 6. Performance
+        document.getElementById("perf-kpi").innerText =
+          data.performance_potensi.kpi.score + "%";
+        document.getElementById("perf-dpk").innerText =
+          data.performance_potensi.total_dpk.market_share_total + "%";
+        document.getElementById("perf-npl").innerText =
+          data.performance_potensi.kredit.npl.current_value;
+
+        // 7. HC
+        const hcBody = document.getElementById("hc-table-body");
+        let sumF = 0,
+          sumP = 0,
+          sumG = 0;
+        data.human_capital.detail_formasi.forEach((row) => {
+          sumF += row.formasi;
+          sumP += row.pemenuhan;
+          sumG += row.gap;
+          hcBody.innerHTML += `<tr class="hover:bg-blue-50/50 transition-colors"><td class="px-8 py-5 font-bold text-gray-700">${
+            row.jabatan
+          }</td><td class="px-8 py-5 text-center font-semibold text-gray-500">${
+            row.formasi
+          }</td><td class="px-8 py-5 text-center text-blue-600 font-black">${
+            row.pemenuhan
+          }</td><td class="px-8 py-5 text-center"><span class="${
+            row.gap > 0
+              ? "text-red-600 bg-red-50 px-3 py-1 rounded-full font-black"
+              : "text-gray-300"
+          }">${row.gap}</span></td></tr>`;
+        });
+        document.getElementById("total-formasi").innerText = sumF;
+        document.getElementById("total-pemenuhan").innerText = sumP;
+        document.getElementById("total-gap").innerText = sumG;
+
+        // 8. Customer
+        document.getElementById("cust-total").innerText =
+          data.customer.total_cif.total.toLocaleString("id-ID");
+        const genWrap = document.getElementById("cust-gen-container");
+        genWrap.innerHTML = "";
+        data.customer.demographic_generation.forEach((g) => {
+          genWrap.innerHTML += `<div class="bg-blue-50/50 p-6 rounded-2xl border border-blue-100 text-center">
+                <p class="text-gray-500 text-xs font-bold uppercase">${
+                  g.label
+                }</p>
+                <p class="text-3xl font-black text-blue-900 mt-2">${g.value.toLocaleString(
+                  "id-ID"
+                )}</p>
+            </div>`;
+        });
+      });
+
+      // Tab Switcher
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab-btn")
+            .forEach((b) => b.classList.remove("tab-active"));
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((c) => c.classList.add("hidden"));
+          btn.classList.add("tab-active");
+          document
+            .getElementById(btn.dataset.target)
+            .classList.remove("hidden");
+        });
+      });
+    </script>
+  </body>
+</html>

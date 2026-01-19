@@ -160,12 +160,222 @@ function populateModalData(code) {
   });
 }
 
+function populateModalRegionData(code) {
+  const data = REGION_DETAIL_DATA[code];
+  if (!data) return;
+
+  // --- TAB INFORMASI ---
+  const id = data.identreg;
+  document.getElementById("m-name").innerText = id.nama_unit_kerja;
+  document.getElementById("m-code").innerText = id.branch_code;
+  document.getElementById("m-kelas").innerText = ": " + id.kelas;
+  document.getElementById("m-klasifikasi").innerText =
+    ": " + id.klasifikasi_wilayah;
+  document.getElementById("m-type").innerText = ": " + id.branch_type;
+  document.getElementById("m-supervisi").innerText = ": " + id.kc_supervisi;
+  document.getElementById("m-region").innerText = ": " + id.region;
+  document.getElementById("m-area").innerText = ": " + id.area;
+  document.getElementById("m-koordinat").innerText = ": " + id.koordinat;
+  document.getElementById("m-alamat").innerText = ": " + id.alamat;
+
+  // Format Branch List
+  const formatList = document.getElementById("m-format-list");
+  formatList.innerHTML = "";
+  Object.entries(data.format_branch).forEach(([key, val]) => {
+    const status = val ? "check_circle" : "cancel";
+    const color = val ? "text-green-500" : "text-red-400";
+    formatList.innerHTML += `
+      <div class="flex items-center gap-2">
+        <span class="material-icons ${color} text-sm">${status}</span>
+        <span class="capitalize">${key.replace("_", " ")}</span>
+      </div>`;
+  });
+
+  // Gedung
+  document.getElementById("m-gedung-jenis").innerText =
+    data.kepemilikan_gedung.jenis;
+  document.getElementById("m-gedung-harga").innerText =
+    data.kepemilikan_gedung.harga;
+  document.getElementById("m-gedung-tempo").innerText =
+    data.kepemilikan_gedung.jatuh_tempo;
+
+  // --- TAB E-CHANNEL ---
+  const ecContainer = document.getElementById("echannel-container");
+  ecContainer.innerHTML = "";
+  const ecKeys = ["atm", "crm", "edc", "qris", "brilink"];
+  ecKeys.forEach((key) => {
+    const item = data[key];
+    ecContainer.innerHTML += `
+      <div class="bg-white p-4 rounded-lg shadow border-l-4 border-blue-600">
+        <p class="text-xs font-bold text-gray-400 uppercase">${key}</p>
+        <p class="text-2xl font-bold">${
+          item.onatm ||
+          item.onedc ||
+          item.onqris ||
+          item.onbrilink ||
+          item.oncrm
+        } Unit</p>
+        <div class="mt-2 text-[10px] text-gray-500">Rel: ${
+          item["rel" + key] || "100%"
+        } | Prd: ${item["prd" + key] || "100%"}</div>
+      </div>`;
+  });
+
+  // --- TAB PERFORMANCE ---
+  document.getElementById("m-perf-kpi").innerText =
+    data.performance_potensi.kpi.score;
+  document.getElementById("m-perf-dpk").innerText =
+    data.performance_potensi.total_dpk.market_share_total + "%";
+  document.getElementById("m-perf-npl").innerText =
+    data.performance_potensi.kredit.npl.current_value;
+
+  // --- TAB HC ---
+  const hcTable = document.getElementById("m-hc-table");
+  hcTable.innerHTML = "";
+  data.human_capital.detail_formasi.forEach((row) => {
+    hcTable.innerHTML += `
+      <tr class="border-b">
+        <td class="px-4 py-2">${row.jabatan}</td>
+        <td class="px-4 py-2 text-center">${row.formasi}</td>
+        <td class="px-4 py-2 text-center">${row.pemenuhan}</td>
+        <td class="px-4 py-2 text-center text-red-600 font-bold">${row.gap}</td>
+      </tr>`;
+  });
+
+  // --- TAB CUSTOMER ---
+  document.getElementById("m-cust-total").innerText =
+    data.customer.total_cif.total.toLocaleString();
+  const genContainer = document.getElementById("m-cust-gen");
+  genContainer.innerHTML = "";
+  data.customer.demographic_generation.forEach((g) => {
+    genContainer.innerHTML += `
+      <div class="flex justify-between border-b pb-1">
+        <span>${g.label}</span>
+        <span class="font-bold">${g.value.toLocaleString()}</span>
+      </div>`;
+  });
+}
+
+function populateModalAreaData(code) {
+  const data = AREA_DETAIL_DATA[code];
+  if (!data) return;
+
+  // --- TAB INFORMASI ---
+  const id = data.identAREA;
+  document.getElementById("m-name").innerText = id.nama_area;
+  document.getElementById("m-code").innerText = id.area_code;
+  document.getElementById("m-kelas").innerText = ": " + id.area_cakupan;
+  document.getElementById("m-klasifikasi").innerText =
+    ": " + id.klasifikasi_wilayah;
+  document.getElementById("m-type").innerText = ": " + id.branch_type;
+  document.getElementById("m-supervisi").innerText = ": " + id.kc_supervisi;
+  document.getElementById("m-region").innerText = ": " + id.region;
+  document.getElementById("m-area").innerText = ": " + id.area;
+  document.getElementById("m-koordinat").innerText = ": " + id.koordinat;
+  document.getElementById("m-alamat").innerText = ": " + id.alamat;
+
+  // Format Branch List
+  const formatList = document.getElementById("m-format-list");
+  formatList.innerHTML = "";
+  Object.entries(data.format_branch).forEach(([key, val]) => {
+    const status = val ? "check_circle" : "cancel";
+    const color = val ? "text-green-500" : "text-red-400";
+    formatList.innerHTML += `
+      <div class="flex items-center gap-2">
+        <span class="material-icons ${color} text-sm">${status}</span>
+        <span class="capitalize">${key.replace("_", " ")}</span>
+      </div>`;
+  });
+
+  // Gedung
+  document.getElementById("m-gedung-jenis").innerText =
+    data.kepemilikan_gedung.jenis;
+  document.getElementById("m-gedung-harga").innerText =
+    data.kepemilikan_gedung.harga;
+  document.getElementById("m-gedung-tempo").innerText =
+    data.kepemilikan_gedung.jatuh_tempo;
+
+  // --- TAB E-CHANNEL ---
+  const ecContainer = document.getElementById("echannel-container");
+  ecContainer.innerHTML = "";
+  const ecKeys = ["atm", "crm", "edc", "qris", "brilink"];
+  ecKeys.forEach((key) => {
+    const item = data[key];
+    ecContainer.innerHTML += `
+      <div class="bg-white p-4 rounded-lg shadow border-l-4 border-blue-600">
+        <p class="text-xs font-bold text-gray-400 uppercase">${key}</p>
+        <p class="text-2xl font-bold">${
+          item.onatm ||
+          item.onedc ||
+          item.onqris ||
+          item.onbrilink ||
+          item.oncrm
+        } Unit</p>
+        <div class="mt-2 text-[10px] text-gray-500">Rel: ${
+          item["rel" + key] || "100%"
+        } | Prd: ${item["prd" + key] || "100%"}</div>
+      </div>`;
+  });
+
+  // --- TAB PERFORMANCE ---
+  document.getElementById("m-perf-kpi").innerText =
+    data.performance_potensi.kpi.score;
+  document.getElementById("m-perf-dpk").innerText =
+    data.performance_potensi.total_dpk.market_share_total + "%";
+  document.getElementById("m-perf-npl").innerText =
+    data.performance_potensi.kredit.npl.current_value;
+
+  // --- TAB HC ---
+  const hcTable = document.getElementById("m-hc-table");
+  hcTable.innerHTML = "";
+  data.human_capital.detail_formasi.forEach((row) => {
+    hcTable.innerHTML += `
+      <tr class="border-b">
+        <td class="px-4 py-2">${row.jabatan}</td>
+        <td class="px-4 py-2 text-center">${row.formasi}</td>
+        <td class="px-4 py-2 text-center">${row.pemenuhan}</td>
+        <td class="px-4 py-2 text-center text-red-600 font-bold">${row.gap}</td>
+      </tr>`;
+  });
+
+  // --- TAB CUSTOMER ---
+  document.getElementById("m-cust-total").innerText =
+    data.customer.total_cif.total.toLocaleString();
+  const genContainer = document.getElementById("m-cust-gen");
+  genContainer.innerHTML = "";
+  data.customer.demographic_generation.forEach((g) => {
+    genContainer.innerHTML += `
+      <div class="flex justify-between border-b pb-1">
+        <span>${g.label}</span>
+        <span class="font-bold">${g.value.toLocaleString()}</span>
+      </div>`;
+  });
+}
+
 // 3. Functions UI
 function openModal(name, code) {
   document.getElementById("modalBranchName").innerText = name;
 
   // Panggil fungsi pengisi data
   populateModalData(code);
+
+  document.getElementById("detailModal").classList.remove("hidden");
+}
+
+function openModalRegion(name, code) {
+  document.getElementById("modalBranchName").innerText = name;
+
+  // Panggil fungsi pengisi data
+  populateModalRegionData(code);
+
+  document.getElementById("detailModal").classList.remove("hidden");
+}
+
+function openModalArea(name, code) {
+  document.getElementById("modalBranchName").innerText = name;
+
+  // Panggil fungsi pengisi data
+  populateModalAreaData(code);
 
   document.getElementById("detailModal").classList.remove("hidden");
 }
@@ -280,7 +490,7 @@ function loadPolygonRegion(fileName) {
         onEachFeature: (feature, layer) => {
           const title = feature.properties?.["Region"] || "Region 2";
           layer.bindTooltip(title, { sticky: true });
-          layer.on("click", () => openModal(title, "1190")); // Default Siak Data
+          layer.on("click", () => openModalRegion(title, "2")); // Default Siak Data
         },
       }).addTo(map);
     });
@@ -300,9 +510,9 @@ function loadPolygonArea(fileName) {
           fillOpacity: 0.25,
         },
         onEachFeature: (feature, layer) => {
-          const title = feature.properties?.["Nama Claster Baru"] || "Area";
+          const title = feature.properties?.["Nama Claster Baru"] || "WADMKK";
           layer.bindTooltip(title, { sticky: true });
-          layer.on("click", () => openModal(title, "1190"));
+          layer.on("click", () => openModal(title, "1"));
         },
       }).addTo(map);
     });
