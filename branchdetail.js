@@ -67,8 +67,16 @@ const KC_DETAIL_DATA = {
     },
     performance_potensi: {
       kpi: { score: 104.6, trend: -1.5 },
-      total_dpk: { market_share_total: 73 },
-      kredit: { npl: { current_value: "2.6%" } },
+      total_dpk: {
+        market_share_total: 73,
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [65, 68, 70, 72, 75, 73],
+      },
+      kredit: {
+        npl: { current_value: "2.6%" },
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [100, 110, 105, 120, 130, 125],
+      },
     },
     human_capital: {
       detail_formasi: [
@@ -84,8 +92,9 @@ const KC_DETAIL_DATA = {
       total_cif: { total: 123000 },
       demographic_generation: [
         { label: "Boomers", value: 33000 },
-        { label: "Gen X", value: 45000 },
-        { label: "Gen Y", value: 45000 },
+        { label: "Gen Z", value: 45000 },
+        { label: "Millennials", value: 45000 },
+        { label: "Gen Alpha", value: 45000 },
       ],
     },
   },
@@ -144,15 +153,23 @@ const KC_DETAIL_DATA = {
       relbrilink: "101%",
     },
     performance_potensi: {
-      kpi: { score: 104.6, trend: -1.5 },
-      total_dpk: { market_share_total: 73 },
-      kredit: { npl: { current_value: "2.6%" } },
+      kpi: { score: 98.2, trend: 2.1 },
+      total_dpk: {
+        market_share_total: 62,
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [50, 55, 52, 58, 60, 62],
+      },
+      kredit: {
+        npl: { current_value: "3.1%" },
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [80, 85, 90, 95, 100, 110],
+      },
     },
     human_capital: {
       detail_formasi: [
         { jabatan: "Pimpinan Cabang", formasi: 1, pemenuhan: 1, gap: 0 },
         { jabatan: "RM FT", formasi: 5, pemenuhan: 4, gap: 1 },
-        { jabatan: "Security", formasi: 9999, pemenuhan: 599, gap: 598 },
+        { jabatan: "Security", formasi: 10, pemenuhan: 8, gap: 2 },
       ],
     },
     customer: {
@@ -223,17 +240,21 @@ const REGION_DETAIL_DATA = {
     },
     performance_potensi: {
       kpi: { score: 104.6, trend: -1.5 },
-      total_dpk: { market_share_total: 73 },
-      kredit: { npl: { current_value: "2.6%" } },
+      total_dpk: {
+        market_share_total: 73,
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [70, 72, 71, 74, 73, 73],
+      },
+      kredit: {
+        npl: { current_value: "2.6%" },
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [500, 520, 510, 540, 550, 560],
+      },
     },
     human_capital: {
       detail_formasi: [
+        { jabatan: "Mantri", formasi: 1000, pemenuhan: 950, gap: 50 },
         { jabatan: "Pimpinan Cabang", formasi: 123, pemenuhan: 1, gap: 0 },
-        { jabatan: "Manager Operasional", formasi: 1, pemenuhan: 1, gap: 0 },
-        { jabatan: "Small Business Manager", formasi: 1, pemenuhan: 1, gap: 0 },
-        { jabatan: "RM SME", formasi: 3, pemenuhan: 3, gap: 0 },
-        { jabatan: "RM FT", formasi: 5, pemenuhan: 4, gap: 1 },
-        { jabatan: "Teller", formasi: 3, pemenuhan: 2, gap: 1 },
       ],
     },
     customer: {
@@ -267,20 +288,46 @@ const KOKAB_DETAIL_DATA = {
       provinsi: "Riau",
       foto_url: "images/kab-siak.jpg",
     },
-    // DATA DEMOGRAFI (Yang tadinya kosong)
     demografi: {
       populasi_penduduk: "457.940",
       pertumbuhan_ekonomi: "4.5%",
       jumlah_bank_pesaing: "12",
       jumlah_penduduk_usia_produktif: "310.000",
     },
-    // DATA UKO SUPERVISI (Yang tadinya kosong)
     uko_supervisi: {
-      kantor_cabang: { jumlah: 2 },
-      kantor_cabang_pembantu: { jumlah: 5 },
-      bri_unit: { jumlah: 18 },
-      terras_bri: { jumlah: 4 },
-      e_buzz: { jumlah: 1 },
+      kantor_cabang: {
+        jumlah: 2,
+        list: [
+          { nama: "KC Siak", alamat: "Jl. Raja Kecik RT.12 RW.4" },
+          { nama: "KC Perawang", alamat: "Jl. Raya Perawang No. 12" },
+        ],
+      },
+      kantor_cabang_pembantu: {
+        jumlah: 5,
+        list: [
+          { nama: "KCP Minas", alamat: "Jl. Yos Sudarso KM 28" },
+          { nama: "KCP Kandis", alamat: "Jl. Raya Kandis KM 72" },
+          { nama: "KCP Sungai Apit", alamat: "Jl. Hang Tuah No. 5" },
+          { nama: "KCP Kerinci Kanan", alamat: "Jl. Poros Utama" },
+          { nama: "KCP Tualang", alamat: "Jl. Raya Tualang" },
+        ],
+      },
+      bri_unit: {
+        jumlah: 18,
+        list: [
+          { nama: "Unit Dayun", alamat: "Jl. Lintas Siak-Buatan" },
+          { nama: "Unit Lubuk Dalam", alamat: "Jl. Pertamina" },
+          { nama: "Unit Koto Gasib", alamat: "Jl. Raya Buatan" },
+        ],
+      },
+      terras_bri: {
+        jumlah: 4,
+        list: [{ nama: "Teras Pasar Siak", alamat: "Jl. Sultan Ismail" }],
+      },
+      e_buzz: {
+        jumlah: 1,
+        list: [{ nama: "E-Buzz Siak Mobile", alamat: "Area Publik Siak" }],
+      },
     },
     format_branch: {
       konvensional: true,
@@ -310,12 +357,20 @@ const KOKAB_DETAIL_DATA = {
     },
     performance_potensi: {
       kpi: { score: 102.5, trend: 1.2 },
-      total_dpk: { market_share_total: 65.4 },
-      kredit: { npl: { current_value: "1.8%" } },
+      total_dpk: {
+        market_share_total: 65.4,
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [60, 62, 63, 65, 64, 65],
+      },
+      kredit: {
+        npl: { current_value: "1.8%" },
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [200, 210, 220, 230, 240, 250],
+      },
     },
     human_capital: {
       detail_formasi: [
-        { jabatan: "Total Staff", formasi: 250, pemenuhan: 245, gap: -5 },
+        { jabatan: "Mantri", formasi: 250, pemenuhan: 245, gap: -5 },
         { jabatan: "RM Kredit", formasi: 45, pemenuhan: 40, gap: -5 },
         { jabatan: "Teller/CS", formasi: 60, pemenuhan: 60, gap: 0 },
       ],
@@ -389,17 +444,23 @@ const AREA_DETAIL_DATA = {
     },
     performance_potensi: {
       kpi: { score: 104.6, trend: -1.5 },
-      total_dpk: { market_share_total: 73 },
-      kredit: { npl: { current_value: "2.6%" } },
+      total_dpk: {
+        market_share_total: 73,
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [70, 71, 72, 73, 74, 73],
+      },
+      kredit: {
+        npl: { current_value: "2.6%" },
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [300, 310, 320, 315, 330, 340],
+      },
     },
     human_capital: {
       detail_formasi: [
-        { jabatan: "Pimpinan Cabang", formasi: 99999, pemenuhan: 1, gap: 0 },
-        { jabatan: "Manager Operasional", formasi: 1, pemenuhan: 1, gap: 0 },
-        { jabatan: "Small Business Manager", formasi: 1, pemenuhan: 1, gap: 0 },
-        { jabatan: "RM SME", formasi: 3, pemenuhan: 3, gap: 0 },
-        { jabatan: "RM FT", formasi: 5, pemenuhan: 4, gap: 1 },
-        { jabatan: "Teller", formasi: 3, pemenuhan: 2, gap: 1 },
+        { jabatan: "Area Head", formasi: 1, pemenuhan: 1, gap: 0 },
+        { jabatan: "Pimpinan Cabang", formasi: 100, pemenuhan: 100, gap: 0 },
+        { jabatan: "Mantri", formasi: 500, pemenuhan: 490, gap: 10 },
+        { jabatan: "Security", formasi: 500, pemenuhan: 490, gap: 10 },
       ],
     },
     customer: {
@@ -466,17 +527,21 @@ const UKER_DETAIL_DATA = {
     },
     performance_potensi: {
       kpi: { score: 104.6, trend: -1.5 },
-      total_dpk: { market_share_total: 73 },
-      kredit: { npl: { current_value: "2.6%" } },
+      total_dpk: {
+        market_share_total: 73,
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [10, 15, 12, 18, 20, 22],
+      },
+      kredit: {
+        npl: { current_value: "2.6%" },
+        trend_labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+        trend_values: [5, 10, 8, 12, 15, 18],
+      },
     },
     human_capital: {
       detail_formasi: [
-        { jabatan: "Pimpinan Cabang", formasi: 123, pemenuhan: 1, gap: 0 },
-        { jabatan: "Manager Operasional", formasi: 1, pemenuhan: 1, gap: 0 },
-        { jabatan: "Small Business Manager", formasi: 1, pemenuhan: 1, gap: 0 },
-        { jabatan: "RM SME", formasi: 3, pemenuhan: 3, gap: 0 },
-        { jabatan: "RM FT", formasi: 5, pemenuhan: 4, gap: 1 },
-        { jabatan: "Teller", formasi: 3, pemenuhan: 2, gap: 1 },
+        { jabatan: "Kaunit", formasi: 1, pemenuhan: 1, gap: 0 },
+        { jabatan: "Mantri", formasi: 4, pemenuhan: 4, gap: 0 },
       ],
     },
     customer: {
@@ -490,11 +555,7 @@ const UKER_DETAIL_DATA = {
   },
 };
 
-// --- PROSES CLONING & OVERWRITE ASLI ---
-KC_DETAIL_DATA["1234"] = JSON.parse(JSON.stringify(KC_DETAIL_DATA["1234"]));
-KC_DETAIL_DATA["1234"].identitas.nama_unit_kerja = "KC Perawang";
-KC_DETAIL_DATA["1234"].identitas.branch_code = "1234";
-
+// --- PROSES CLONING & OVERWRITE ---
 KC_DETAIL_DATA["5566"] = JSON.parse(JSON.stringify(KC_DETAIL_DATA["1190"]));
 KC_DETAIL_DATA["5566"].identitas.nama_unit_kerja = "KC Tambusai";
 KC_DETAIL_DATA["5566"].identitas.branch_code = "5566";
@@ -507,25 +568,14 @@ KC_DETAIL_DATA["268"] = JSON.parse(JSON.stringify(KC_DETAIL_DATA["1190"]));
 KC_DETAIL_DATA["268"].identitas.nama_unit_kerja = "KC Bangkinang";
 KC_DETAIL_DATA["268"].identitas.branch_code = "268";
 
-REGION_DETAIL_DATA["2"] = JSON.parse(JSON.stringify(REGION_DETAIL_DATA["2"]));
-REGION_DETAIL_DATA["2"].identreg.nama_unit_kerja = "REGION 2";
-
-KOKAB_DETAIL_DATA["1"] = JSON.parse(JSON.stringify(KOKAB_DETAIL_DATA["1"]));
-KOKAB_DETAIL_DATA["1"].identkab.nama_kab = "Kabupaten Siak";
-
-AREA_DETAIL_DATA["1"] = JSON.parse(JSON.stringify(AREA_DETAIL_DATA["1"]));
-AREA_DETAIL_DATA["1"].identAREA.nama_area = "AREA SIAK";
-
-UKER_DETAIL_DATA["U1"] = JSON.parse(JSON.stringify(AREA_DETAIL_DATA["U1"]));
-UKER_DETAIL_DATA["U1"].identUKER.nama_unit_kerja = "BRI UNIT Dayun";
-// --- LOGIKA RENDER DASHBOARD (TAMBAHAN UNTUK GRAFIK) ---
-function initLineChart(id, data, color, fill = false) {
+// --- LOGIKA HELPER GRAFIK GLOBAL ---
+function initLineChartGlobal(id, labels, data, color, fill = false) {
   const ctx = document.getElementById(id);
   if (!ctx) return;
   new Chart(ctx, {
     type: "line",
     data: {
-      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+      labels: labels,
       datasets: [
         {
           data: data,
@@ -533,14 +583,15 @@ function initLineChart(id, data, color, fill = false) {
           backgroundColor: color + "33",
           fill: fill,
           tension: 0.4,
-          pointRadius: 0,
+          pointRadius: 2,
         },
       ],
     },
     options: {
+      responsive: true,
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
-      scales: { x: { display: false }, y: { display: false } },
+      scales: { x: { display: true }, y: { display: true } },
     },
   });
 }

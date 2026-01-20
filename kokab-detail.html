@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -38,18 +38,38 @@
       .no-scrollbar::-webkit-scrollbar {
         display: none;
       }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.4s ease-out forwards;
+      }
+
+      .uko-card-active {
+        border-color: #1e40af !important;
+        background-color: #eff6ff !important;
+        box-shadow: 0 0 0 2px #1e40af inset !important;
+      }
     </style>
   </head>
   <body class="bg-gray-50 min-h-screen">
     <header
-      class="bg-white border-b px-8 py-4 flex justify-between items-center shadow-sm"
+      class="bg-white border-b px-8 py-4 flex justify-between items-center shadow-sm sticky top-0 z-20"
     >
       <div>
         <h1 class="text-2xl font-black text-blue-900" id="pageTitle">
           Loading...
         </h1>
         <p
-          class="text-gray-400 text-xs uppercase tracking-widest"
+          class="text-gray-400 text-xs uppercase tracking-widest font-bold mt-1"
           id="pageSubtitle"
         >
           Laporan Profil Wilayah
@@ -57,41 +77,41 @@
       </div>
       <a
         href="profilekab.html"
-        class="flex items-center gap-2 text-blue-600 font-bold hover:underline"
+        class="flex items-center gap-2 text-blue-600 font-bold hover:underline transition-all"
       >
-        <span class="material-icons">arrow_back</span> Back to Filter
+        <span class="material-icons text-sm">arrow_back</span> Back to Filter
       </a>
     </header>
 
     <nav
-      class="flex bg-white px-8 border-b sticky top-0 z-10 overflow-x-auto no-scrollbar"
+      class="flex bg-white px-8 border-b sticky top-[73px] z-10 overflow-x-auto no-scrollbar gap-1 pt-2"
     >
       <button
-        class="tab-btn tab-active px-6 py-4 whitespace-nowrap"
+        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500 font-bold"
         data-target="tab-info"
       >
         Informasi & Demografi
       </button>
       <button
-        class="tab-btn px-6 py-4 text-gray-500 whitespace-nowrap"
+        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500 font-bold"
         data-target="tab-echannel"
       >
         E-Channel
       </button>
       <button
-        class="tab-btn px-6 py-4 text-gray-500 whitespace-nowrap"
+        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500 font-bold"
         data-target="tab-perf"
       >
         Performance
       </button>
       <button
-        class="tab-btn px-6 py-4 text-gray-500 whitespace-nowrap"
+        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500 font-bold"
         data-target="tab-hc"
       >
         Human Capital
       </button>
       <button
-        class="tab-btn px-6 py-4 text-gray-500 whitespace-nowrap"
+        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500 font-bold"
         data-target="tab-customer"
       >
         Customer
@@ -99,7 +119,7 @@
     </nav>
 
     <main class="p-8 max-w-7xl mx-auto">
-      <section id="tab-info" class="tab-content space-y-6">
+      <section id="tab-info" class="tab-content hidden space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div
             class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"
@@ -124,16 +144,77 @@
             <div class="grid grid-cols-2 gap-4" id="demografi-grid"></div>
           </div>
         </div>
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <h3
-            class="text-lg font-bold mb-4 flex items-center gap-2 text-blue-800"
+
+        <div
+          class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6"
+        >
+          <div
+            class="flex flex-col md:flex-row md:items-center justify-between gap-4"
           >
-            <span class="material-icons">business</span> Sebaran UKO Supervisi
-          </h3>
+            <h3 class="text-lg font-bold flex items-center gap-2 text-blue-800">
+              <span class="material-icons">business</span> Sebaran UKO Supervisi
+            </h3>
+            <div class="flex items-center gap-2">
+              <button
+                onclick="resetUkoSelection()"
+                class="text-[10px] bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded font-bold text-gray-500 uppercase tracking-tighter"
+              >
+                Reset Selection
+              </button>
+            </div>
+          </div>
           <div
             class="grid grid-cols-2 md:grid-cols-5 gap-4"
             id="uko-grid"
           ></div>
+          <div class="pt-6 border-t border-gray-100">
+            <div
+              class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4"
+            >
+              <p
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest italic"
+              >
+                Rincian:
+                <span id="current-uko-type" class="text-blue-600"
+                  >Semua Tipe</span
+                >
+              </p>
+              <div class="relative w-full md:w-64">
+                <span
+                  class="material-icons absolute left-3 top-2 text-gray-400 text-sm"
+                  >search</span
+                >
+                <input
+                  type="text"
+                  id="uko-search"
+                  placeholder="Cari unit atau alamat..."
+                  class="w-full pl-9 pr-4 py-2 border rounded-lg text-xs focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+              </div>
+            </div>
+            <div
+              class="overflow-hidden rounded-xl border border-gray-100 shadow-sm"
+            >
+              <div class="overflow-x-auto no-scrollbar">
+                <table class="w-full text-left border-collapse min-w-[600px]">
+                  <thead
+                    class="bg-gray-50 text-[10px] font-black text-gray-500 uppercase border-b"
+                  >
+                    <tr>
+                      <th class="px-6 py-4">Nama Unit Kerja</th>
+                      <th class="px-6 py-4">Tipe</th>
+                      <th class="px-6 py-4">Status</th>
+                      <th class="px-6 py-4">Alamat / Lokasi</th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    id="uko-list-table"
+                    class="divide-y text-xs text-gray-700 bg-white"
+                  ></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -145,33 +226,55 @@
         ></div>
       </section>
 
-      <section id="tab-perf" class="tab-content hidden">
+      <section id="tab-perf" class="tab-content hidden space-y-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div
             class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-blue-600 text-center"
           >
-            <p class="text-gray-500 text-xs font-bold uppercase">KPI Score</p>
-            <h2 id="perf-kpi" class="text-4xl font-black text-blue-900 mt-2">
+            <p class="text-gray-400 text-xs font-black uppercase">KPI Score</p>
+            <h2 id="perf-kpi" class="text-5xl font-black text-blue-900 mt-2">
               -
             </h2>
           </div>
           <div
             class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-green-500 text-center"
           >
-            <p class="text-gray-500 text-xs font-bold uppercase">
-              M. Share DPK
+            <p class="text-gray-400 text-xs font-black uppercase">
+              Market Share DPK
             </p>
-            <h2 id="perf-dpk" class="text-4xl font-black text-green-600 mt-2">
+            <h2 id="perf-dpk" class="text-5xl font-black text-green-600 mt-2">
               -
             </h2>
           </div>
           <div
             class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-red-500 text-center"
           >
-            <p class="text-gray-500 text-xs font-bold uppercase">NPL Ratio</p>
-            <h2 id="perf-npl" class="text-4xl font-black text-red-600 mt-2">
+            <p class="text-gray-400 text-xs font-black uppercase">NPL Ratio</p>
+            <h2 id="perf-npl" class="text-5xl font-black text-red-600 mt-2">
               -
             </h2>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div
+            class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm"
+          >
+            <h3
+              class="text-xs font-black text-gray-400 uppercase mb-4 text-center"
+            >
+              DPK Trend
+            </h3>
+            <div class="h-48"><canvas id="mainDpkChart"></canvas></div>
+          </div>
+          <div
+            class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm"
+          >
+            <h3
+              class="text-xs font-black text-gray-400 uppercase mb-4 text-center"
+            >
+              Loan Growth Trend
+            </h3>
+            <div class="h-48"><canvas id="loanChart"></canvas></div>
           </div>
         </div>
       </section>
@@ -220,58 +323,179 @@
         </div>
       </section>
 
-      <section id="tab-customer" class="tab-content hidden space-y-6">
+      <section id="tab-customer" class="tab-content hidden space-y-8">
         <div
-          class="bg-gradient-to-r from-blue-900 to-blue-700 p-10 rounded-3xl text-white shadow-xl flex justify-between items-center relative overflow-hidden"
+          class="bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-900 p-10 rounded-[2.5rem] text-white shadow-xl flex justify-between items-center relative overflow-hidden"
         >
           <div class="relative z-10">
             <p
-              class="text-blue-100 text-xs font-black uppercase tracking-[0.2em]"
+              class="text-blue-300 text-xs font-black uppercase tracking-[0.3em] mb-2"
             >
-              Total CIF Nasabah Wilayah Kota Kabupaten
+              Total CIF Wilayah
             </p>
-            <h2 id="cust-total" class="text-5xl font-black mt-2">0</h2>
+            <h2
+              id="cust-total"
+              class="text-7xl font-black tracking-tighter italic"
+            >
+              0
+            </h2>
           </div>
-          <span class="material-icons text-7xl opacity-20">groups</span>
+          <span
+            class="material-icons text-[150px] absolute right-[-10px] opacity-10 rotate-12"
+            >groups</span
+          >
         </div>
-        <div class="bg-white p-6 rounded-2xl shadow-sm border">
-          <h3 class="text-lg font-bold mb-6 text-gray-800 border-b pb-4">
-            Demografi Per Generasi
-          </h3>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div
             id="cust-gen-container"
-            class="grid grid-cols-1 sm:grid-cols-3 gap-6"
+            class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4"
           ></div>
+          <div
+            class="lg:col-span-4 bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col items-center justify-center"
+          >
+            <h3
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6"
+            >
+              Demographic Share
+            </h3>
+            <div class="w-full max-w-[220px] aspect-square">
+              <canvas id="customerPieChart"></canvas>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
     <script src="branchdetail.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const params = new URLSearchParams(window.location.search);
-        const code = params.get("code") || "1"; // Default ke 1 jika tidak ada code
+      let charts = {};
+      let fullRawUko = {};
+      let selectedUkoTypes = new Set();
 
-        const data = KOKAB_DETAIL_DATA[code];
+      function initLineChart(id, labels, data, color) {
+        const ctx = document.getElementById(id).getContext("2d");
+        if (charts[id]) charts[id].destroy();
+        charts[id] = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: data,
+                borderColor: color,
+                backgroundColor: color + "15",
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 3,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+          },
+        });
+      }
 
-        if (!data) {
-          document.body.innerHTML = `<div class="p-20 text-center text-gray-500 font-bold">Data dengan Code: ${code} Tidak Ditemukan</div>`;
+      function initPieChart(id, labels, data) {
+        const ctx = document.getElementById(id).getContext("2d");
+        if (charts[id]) charts[id].destroy();
+        charts[id] = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: data,
+                backgroundColor: ["#1e3a8a", "#2563eb", "#60a5fa", "#94a3b8"],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { boxWidth: 12, font: { weight: "bold", size: 10 } },
+              },
+            },
+            cutout: "75%",
+          },
+        });
+      }
+
+      function updateUkoTable() {
+        const tableBody = document.getElementById("uko-list-table");
+        const typeLabel = document.getElementById("current-uko-type");
+        const keyword = document
+          .getElementById("uko-search")
+          .value.toLowerCase();
+        tableBody.innerHTML = "";
+        let combined = [];
+        const activeTypes =
+          selectedUkoTypes.size > 0
+            ? Array.from(selectedUkoTypes)
+            : Object.keys(fullRawUko);
+        typeLabel.innerText =
+          selectedUkoTypes.size > 0
+            ? Array.from(selectedUkoTypes)
+                .join(", ")
+                .replace(/_/g, " ")
+                .toUpperCase()
+            : "SEMUA TIPE";
+
+        activeTypes.forEach((type) => {
+          (fullRawUko[type].list || []).forEach((unit) => {
+            if (
+              unit.nama.toLowerCase().includes(keyword) ||
+              (unit.alamat && unit.alamat.toLowerCase().includes(keyword))
+            ) {
+              combined.push({ ...unit, label: type.replace(/_/g, " ") });
+            }
+          });
+        });
+
+        if (combined.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="4" class="px-6 py-10 text-center text-gray-400 uppercase text-[10px] font-bold">Data tidak ditemukan</td></tr>`;
           return;
         }
+        combined.forEach((unit) => {
+          tableBody.innerHTML += `
+            <tr class="hover:bg-blue-50/50 transition-colors animate-fade-in">
+              <td class="px-6 py-4 font-bold text-blue-900">${unit.nama || "-"}</td>
+              <td class="px-6 py-4"><span class="bg-gray-100 px-2 py-1 rounded text-[9px] font-black uppercase text-gray-500">${unit.label}</span></td>
+              <td class="px-6 py-4"><span class="flex items-center gap-1 text-green-600 font-bold"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Aktif</span></td>
+              <td class="px-6 py-4 text-gray-400 italic font-medium">${unit.alamat || "Alamat tidak tersedia"}</td>
+            </tr>`;
+        });
+      }
+
+      function resetUkoSelection() {
+        selectedUkoTypes.clear();
+        document
+          .querySelectorAll(".uko-filter-card")
+          .forEach((c) => c.classList.remove("uko-card-active"));
+        updateUkoTable();
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code") || "1";
+        const data = KOKAB_DETAIL_DATA[code];
+        if (!data) return;
 
         const id = data.identkab || data.identreg;
-
-        // 1. Header
         document.getElementById("pageTitle").innerText = (
           id.nama_kab ||
           id.nama_unit_kerja ||
-          "DETAIL WILAYAH"
+          "DETAIL"
         ).toUpperCase();
-        document.getElementById("pageSubtitle").innerText = `Provinsi ${
-          id.provinsi || "-"
-        } | ${id.area || id.region_supervisi || "-"}`;
+        document.getElementById("pageSubtitle").innerText =
+          `Provinsi ${id.provinsi} | ${id.area || id.region_supervisi}`;
 
-        // 2. Administrasi
         const infoTable = document.getElementById("info-table");
         const infoItems = {
           "Nama Kota/Kab": id.nama_kab || id.nama_unit_kerja,
@@ -281,151 +505,143 @@
           Region: id.region_supervisi || id.region,
         };
         Object.entries(infoItems).forEach(([k, v]) => {
-          infoTable.innerHTML += `<tr><td class="font-bold text-gray-400 w-40">${k}</td><td>: ${
-            v || "-"
-          }</td></tr>`;
+          infoTable.innerHTML += `<tr><td class="font-bold text-gray-400 w-40 uppercase text-[10px]">${k}</td><td class="text-gray-800 font-semibold">: ${v || "-"}</td></tr>`;
         });
 
-        // 3. Demografi (Pesaing) - Clear existing before loop
         const demoGrid = document.getElementById("demografi-grid");
-        demoGrid.innerHTML = "";
         if (data.demografi) {
           Object.entries(data.demografi).forEach(([k, v]) => {
-            demoGrid.innerHTML += `<div class="bg-gray-50 p-4 rounded-xl border text-center">
-                <p class="text-[10px] font-bold text-gray-400 uppercase">${k.replace(
-                  /_/g,
-                  " "
-                )}</p>
-                <p class="text-xl font-black text-blue-900 mt-1">${v}</p>
-            </div>`;
+            demoGrid.innerHTML += `<div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-center"><p class="text-[10px] font-bold text-gray-400 uppercase">${k.replace(/_/g, " ")}</p><p class="text-xl font-black text-blue-900 mt-1">${v}</p></div>`;
           });
         }
 
-        // 4. UKO Supervisi
+        fullRawUko = data.uko_supervisi || {};
         const ukoGrid = document.getElementById("uko-grid");
-        ukoGrid.innerHTML = "";
-        if (data.uko_supervisi) {
-          Object.entries(data.uko_supervisi).forEach(([k, v]) => {
-            ukoGrid.innerHTML += `<div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-center">
-                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">${k.replace(
-                  /_/g,
-                  " "
-                )}</p>
-                <p class="text-2xl font-black text-blue-600">${v.jumlah}</p>
-            </div>`;
-          });
-        }
+        Object.entries(fullRawUko).forEach(([k, v]) => {
+          const card = document.createElement("div");
+          card.className =
+            "cursor-pointer bg-white p-4 rounded-xl border border-gray-100 text-center shadow-sm hover:border-blue-500 hover:bg-blue-50 transition-all group uko-filter-card";
+          card.innerHTML = `<p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter mb-1 group-hover:text-blue-500">${k.replace(/_/g, " ")}</p><p class="text-2xl font-black text-blue-600">${v.jumlah}</p>`;
+          card.onclick = () => {
+            if (selectedUkoTypes.has(k)) {
+              selectedUkoTypes.delete(k);
+              card.classList.remove("uko-card-active");
+            } else {
+              selectedUkoTypes.add(k);
+              card.classList.add("uko-card-active");
+            }
+            updateUkoTable();
+          };
+          ukoGrid.appendChild(card);
+        });
+        updateUkoTable();
+        document.getElementById("uko-search").oninput = updateUkoTable;
 
-        // 5. E-Channel & Premises
-        const kpi = data.performance_potensi.kpi;
-        document.getElementById("premises-container").innerHTML = `
-            <div class="bg-card-green p-6 rounded-2xl shadow-sm border border-green-100 w-full sm:w-60">
-                <div class="flex justify-between items-start mb-4"><span class="text-sm font-black text-green-800 uppercase">Premises</span><span class="badge-white">Mei</span></div>
-                <h2 class="text-4xl font-black text-gray-800">${kpi.score}%</h2>
-                <p class="flex items-center gap-1 font-bold mt-2 ${
-                  kpi.trend < 0 ? "text-red-500" : "text-green-500"
-                } text-xs">
-                    <span class="material-icons text-sm">${
-                      kpi.trend < 0 ? "arrow_downward" : "arrow_upward"
-                    }</span> ${Math.abs(kpi.trend)}%
-                </p>
-            </div>`;
+        // E-CHANNEL (KEMBALI KE STRUKTUR BRANCH DETAIL)
+        document.getElementById("premises-container").innerHTML =
+          `<div class="bg-card-green p-5 rounded-2xl border border-green-100 w-full sm:w-60"><div class="flex justify-between items-start mb-4"><span class="text-sm font-black text-green-800 uppercase">Premises</span><span class="badge-white">Mei</span></div><h2 class="text-4xl font-black text-gray-800">${data.performance_potensi.kpi.score}%</h2><p class="text-red-500 text-xs font-bold">↓ ${Math.abs(data.performance_potensi.kpi.trend)}%</p></div>`;
 
         const ecGrid = document.getElementById("echannel-grid");
-        ecGrid.innerHTML = "";
         const channels = [
           { id: "atm", l: "ATM" },
           { id: "crm", l: "CRM" },
           { id: "edc", l: "EDC" },
-          { id: "qris", l: "QRIS" },
-          { id: "brilink", l: "Brilink" },
+          { id: "qris", l: "TERAS" },
+          { id: "brilink", l: "Agen Brilink" },
         ];
         channels.forEach((ch) => {
           const item = data[ch.id];
-          if (item) {
-            ecGrid.innerHTML += `<div class="bg-card-blue p-5 rounded-2xl border border-blue-50">
-                    <div class="flex justify-between items-center mb-4"><span class="font-black text-blue-900 text-sm uppercase">${
-                      ch.l
-                    }</span><span class="badge-white">Mei</span></div>
-                    <div class="text-[11px] mb-4">
-                        <div class="flex justify-between"><span>Total</span><span class="font-bold">${
-                          item.jml
-                        }</span></div>
+          if (!item) return;
+          ecGrid.innerHTML += `
+            <div class="bg-card-blue p-5 rounded-2xl border border-blue-50 transition-all hover:shadow-md">
+                <div class="flex justify-between items-center mb-6"><span class="font-black text-blue-900 text-sm uppercase">${ch.l}</span><span class="badge-white">Mei</span></div>
+                <div class="text-[11px] space-y-2 mb-6">
+                    <div class="flex justify-between text-gray-800 font-bold"><span>Jumlah</span><span>: ${item.jml}</span></div>
+                    <div class="flex justify-between pl-3 text-gray-500"><span>Onsite</span><span>: ${item["on" + ch.id] || item.onsite || 0}</span></div>
+                    <div class="flex justify-between pl-3 text-gray-500"><span>Offsite</span><span>: ${item["off" + ch.id] || item.offsite || 0}</span></div>
+                </div>
+                <div class="space-y-4 pt-4 border-t border-blue-100/50">
+                    <div>
+                        <div class="flex justify-between text-[9px] font-black text-gray-400 uppercase"><span>Productivity</span></div>
+                        <div class="flex justify-between items-end">
+                            <span class="text-xl font-black text-gray-800">${item["prd" + ch.id] || item.prd || "0%"}</span>
+                            <span class="text-red-500 text-[9px] font-bold">↓ 1.5%</span>
+                        </div>
                     </div>
-                    <div class="pt-2 border-t border-blue-100/50">
-                        <p class="text-[9px] text-gray-400 uppercase">Productivity</p>
-                        <p class="text-xl font-black text-gray-800">${
-                          item["prd" + ch.id] || item.prd || "0%"
-                        }</p>
-                    </div>
-                </div>`;
-          }
+                </div>
+            </div>`;
         });
 
-        // 6. Performance
+        // PERFORMANCE & CHARTS
         document.getElementById("perf-kpi").innerText =
           data.performance_potensi.kpi.score + "%";
         document.getElementById("perf-dpk").innerText =
           data.performance_potensi.total_dpk.market_share_total + "%";
         document.getElementById("perf-npl").innerText =
           data.performance_potensi.kredit.npl.current_value;
+        initLineChart(
+          "mainDpkChart",
+          data.performance_potensi.total_dpk.trend_labels,
+          data.performance_potensi.total_dpk.trend_values,
+          "#2563eb",
+        );
+        initLineChart(
+          "loanChart",
+          data.performance_potensi.kredit.trend_labels,
+          data.performance_potensi.kredit.trend_values,
+          "#1e40af",
+        );
 
-        // 7. HC
+        // HUMAN CAPITAL
         const hcBody = document.getElementById("hc-table-body");
-        let sumF = 0,
-          sumP = 0,
-          sumG = 0;
-        data.human_capital.detail_formasi.forEach((row) => {
-          sumF += row.formasi;
-          sumP += row.pemenuhan;
-          sumG += row.gap;
-          hcBody.innerHTML += `<tr class="hover:bg-blue-50/50 transition-colors"><td class="px-8 py-5 font-bold text-gray-700">${
-            row.jabatan
-          }</td><td class="px-8 py-5 text-center font-semibold text-gray-500">${
-            row.formasi
-          }</td><td class="px-8 py-5 text-center text-blue-600 font-black">${
-            row.pemenuhan
-          }</td><td class="px-8 py-5 text-center"><span class="${
-            row.gap > 0
-              ? "text-red-600 bg-red-50 px-3 py-1 rounded-full font-black"
-              : "text-gray-300"
-          }">${row.gap}</span></td></tr>`;
+        let sF = 0,
+          sP = 0,
+          sG = 0;
+        data.human_capital.detail_formasi.forEach((r) => {
+          sF += r.formasi;
+          sP += r.pemenuhan;
+          sG += r.gap;
+          hcBody.innerHTML += `<tr class="hover:bg-blue-50/50 transition-colors"><td class="px-8 py-5 font-bold text-gray-700">${r.jabatan}</td><td class="text-center font-semibold text-gray-500">${r.formasi}</td><td class="text-center text-blue-600 font-black">${r.pemenuhan}</td><td class="text-center"><span class="${r.gap > 0 ? "text-red-600 bg-red-50 px-3 py-1 rounded-full font-black" : "text-gray-300"}">${r.gap}</span></td></tr>`;
         });
-        document.getElementById("total-formasi").innerText = sumF;
-        document.getElementById("total-pemenuhan").innerText = sumP;
-        document.getElementById("total-gap").innerText = sumG;
+        document.getElementById("total-formasi").innerText = sF;
+        document.getElementById("total-pemenuhan").innerText = sP;
+        document.getElementById("total-gap").innerText = sG;
 
-        // 8. Customer
+        // CUSTOMER
         document.getElementById("cust-total").innerText =
           data.customer.total_cif.total.toLocaleString("id-ID");
-        const genWrap = document.getElementById("cust-gen-container");
-        genWrap.innerHTML = "";
+        const genIcons = {
+          Boomers: "elderly",
+          "Gen X": "person",
+          Millennials: "devices",
+          "Gen Z": "bolt",
+        };
+        const cL = [],
+          cV = [];
         data.customer.demographic_generation.forEach((g) => {
-          genWrap.innerHTML += `<div class="bg-blue-50/50 p-6 rounded-2xl border border-blue-100 text-center">
-                <p class="text-gray-500 text-xs font-bold uppercase">${
-                  g.label
-                }</p>
-                <p class="text-3xl font-black text-blue-900 mt-2">${g.value.toLocaleString(
-                  "id-ID"
-                )}</p>
-            </div>`;
+          cL.push(g.label);
+          cV.push(g.value);
+          document.getElementById("cust-gen-container").innerHTML +=
+            `<div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow"><div><p class="text-gray-400 text-[10px] font-black uppercase tracking-widest">${g.label}</p><p class="text-3xl font-black text-blue-900 mt-1">${g.value.toLocaleString("id-ID")}</p></div><div class="bg-blue-50 text-blue-600 w-12 h-12 rounded-2xl flex items-center justify-center"><span class="material-icons">${genIcons[g.label] || "groups"}</span></div></div>`;
         });
-      });
+        initPieChart("customerPieChart", cL, cV);
 
-      // Tab Switcher
-      document.querySelectorAll(".tab-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document
-            .querySelectorAll(".tab-btn")
-            .forEach((b) => b.classList.remove("tab-active"));
-          document
-            .querySelectorAll(".tab-content")
-            .forEach((c) => c.classList.add("hidden"));
-          btn.classList.add("tab-active");
-          document
-            .getElementById(btn.dataset.target)
-            .classList.remove("hidden");
-        });
+        // TAB NAVIGATION
+        const tabs = document.querySelectorAll(".tab-btn");
+        tabs.forEach(
+          (btn) =>
+            (btn.onclick = () => {
+              tabs.forEach((b) => b.classList.remove("tab-active"));
+              document
+                .querySelectorAll(".tab-content")
+                .forEach((c) => c.classList.add("hidden"));
+              btn.classList.add("tab-active");
+              document
+                .getElementById(btn.dataset.target)
+                .classList.remove("hidden");
+            }),
+        );
+        tabs[0].click();
       });
     </script>
   </body>

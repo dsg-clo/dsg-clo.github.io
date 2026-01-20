@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Branch Detail Report</title>
+    <title>Analisa Profile Uko</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link
@@ -67,31 +67,31 @@
       class="flex bg-white px-8 border-b sticky top-[73px] z-10 overflow-x-auto no-scrollbar gap-1 pt-2"
     >
       <button
-        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500"
+        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500 font-bold"
         data-target="tab-info"
       >
         Informasi
       </button>
       <button
-        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500"
+        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500 font-bold"
         data-target="tab-echannel"
       >
         E-Channel
       </button>
       <button
-        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500"
+        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500 font-bold"
         data-target="tab-perf"
       >
         Performance
       </button>
       <button
-        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500"
+        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500 font-bold"
         data-target="tab-hc"
       >
         Human Capital
       </button>
       <button
-        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500"
+        class="tab-btn px-6 py-4 whitespace-nowrap text-gray-500 font-bold"
         data-target="tab-customer"
       >
         Customer
@@ -102,7 +102,7 @@
       <section id="tab-info" class="tab-content hidden space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
           <div
-            class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col max-h-[70vh]"
+            class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col max-h-[75vh]"
           >
             <div class="p-6 border-b bg-gray-50/50">
               <h3
@@ -156,7 +156,7 @@
                   id="branch-image"
                   src=""
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  alt="Branch Office"
+                  alt="Office"
                 />
                 <div
                   class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4"
@@ -226,18 +226,22 @@
           <div
             class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm"
           >
-            <h3 class="text-xs font-black text-gray-400 uppercase mb-4">
-              DPK Trend (6 Months)
+            <h3
+              class="text-xs font-black text-gray-400 uppercase mb-4 text-center"
+            >
+              DPK Trend
             </h3>
-            <div class="h-40"><canvas id="mainDpkChart"></canvas></div>
+            <div class="h-48"><canvas id="mainDpkChart"></canvas></div>
           </div>
           <div
             class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm"
           >
-            <h3 class="text-xs font-black text-gray-400 uppercase mb-4">
+            <h3
+              class="text-xs font-black text-gray-400 uppercase mb-4 text-center"
+            >
               Loan Growth Trend
             </h3>
-            <div class="h-40"><canvas id="loanChart"></canvas></div>
+            <div class="h-48"><canvas id="loanChart"></canvas></div>
           </div>
         </div>
       </section>
@@ -288,116 +292,163 @@
 
       <section id="tab-customer" class="tab-content hidden space-y-8">
         <div
-          class="bg-gradient-to-r from-blue-900 to-blue-700 p-10 rounded-3xl text-white shadow-xl flex justify-between items-center relative overflow-hidden"
+          class="bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-900 p-10 rounded-[2.5rem] text-white shadow-xl flex justify-between items-center relative overflow-hidden"
         >
           <div class="relative z-10">
             <p
-              class="text-blue-100 text-xs font-black uppercase tracking-[0.2em]"
+              class="text-blue-300 text-xs font-black uppercase tracking-[0.3em] mb-2"
             >
               Total CIF (Nasabah Active)
             </p>
-            <h2 id="cust-total" class="text-6xl font-black mt-2 tracking-tight">
+            <h2
+              id="cust-total"
+              class="text-7xl font-black tracking-tighter italic"
+            >
               0
             </h2>
           </div>
           <span
-            class="material-icons text-[120px] absolute right-[-20px] opacity-10 rotate-12"
+            class="material-icons text-[150px] absolute right-[-10px] opacity-10 rotate-12"
             >groups</span
           >
         </div>
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-          <h3 class="text-lg font-black mb-8 text-gray-800">
-            Demografi Berdasarkan Generasi
-          </h3>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div
             id="cust-gen-container"
-            class="grid grid-cols-1 sm:grid-cols-3 gap-6"
+            class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4"
           ></div>
+          <div
+            class="lg:col-span-4 bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col items-center justify-center"
+          >
+            <h3
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6"
+            >
+              Demographic Share
+            </h3>
+            <div class="w-full max-w-[220px] aspect-square">
+              <canvas id="customerPieChart"></canvas>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
     <script src="branchdetail.js"></script>
     <script>
+      let charts = {};
+
+      function initLineChart(id, labels, data, color) {
+        const ctx = document.getElementById(id).getContext("2d");
+        if (charts[id]) charts[id].destroy();
+        charts[id] = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: data,
+                borderColor: color,
+                backgroundColor: color + "15",
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 3,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+          },
+        });
+      }
+
+      function initPieChart(id, labels, data) {
+        const ctx = document.getElementById(id).getContext("2d");
+        if (charts[id]) charts[id].destroy();
+        charts[id] = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: data,
+                backgroundColor: ["#1e3a8a", "#2563eb", "#60a5fa", "#94a3b8"],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { boxWidth: 12, font: { weight: "bold", size: 10 } },
+              },
+            },
+            cutout: "75%",
+          },
+        });
+      }
+
       document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(window.location.search);
         const type = params.get("type") || "KC";
         const code = params.get("code") || "1190";
 
-        let data = null;
-        if (type === "KC") data = KC_DETAIL_DATA[code];
-        else if (type === "REGION") data = REGION_DETAIL_DATA[code];
-        else if (type === "AREA") data = AREA_DETAIL_DATA[code];
-        else if (type === "KOKAB") data = KOKAB_DETAIL_DATA[code];
-        else if (type === "UKER") data = UKER_DETAIL_DATA[code];
-        if (!data) {
-          document.body.innerHTML = `<div class='h-screen flex items-center justify-center'>Data Not Found</div>`;
-          return;
-        }
+        let data =
+          type === "KC"
+            ? KC_DETAIL_DATA[code]
+            : type === "REGION"
+              ? REGION_DETAIL_DATA[code]
+              : type === "AREA"
+                ? AREA_DETAIL_DATA[code]
+                : type === "UKER"
+                  ? UKER_DETAIL_DATA[code]
+                  : null;
 
-        // --- 1. IDENTITAS & HEADER ---
+        if (!data) return;
+
+        // 1. IDENTITAS
         const ident =
-          data.identitas ||
-          data.identreg ||
-          data.identAREA ||
-          data.identkab ||
-          data.identUKER;
+          data.identitas || data.identreg || data.identAREA || data.identUKER;
         document.getElementById("pageBranchName").innerText =
-          ident.nama_unit_kerja || ident.nama_area || ident.nama_kab;
-        document.getElementById("pageSubtitle").innerText = `${type} - ${
-          ident.branch_code || ident.area_code || "N/A"
-        }`;
+          ident.nama_unit_kerja || ident.nama_area;
+        document.getElementById("pageSubtitle").innerText =
+          `${type} - ${ident.branch_code || code}`;
+        document.getElementById("info-koordinat").innerText =
+          ident.koordinat || "Koordinat belum terdaftar";
+        if (ident.foto_url)
+          document.getElementById("branch-image").src = ident.foto_url;
 
         const infoBody = document.getElementById("info-table-body");
-        const infoFields = {
-          "Nama Unit":
-            ident.nama_unit_kerja || ident.nama_area || ident.nama_kab,
-          "Kode Unit": ident.branch_code || ident.area_code,
-          "Kelas/Tipe": ident.kelas || ident.branch_type,
+        Object.entries({
+          "Nama Unit": ident.nama_unit_kerja,
+          "Kode Unit": ident.branch_code,
+          "Kelas/Tipe": ident.kelas,
           Wilayah: ident.klasifikasi_wilayah,
           Alamat: ident.alamat,
-          Provinsi: ident.provinsi,
-        };
-        Object.entries(infoFields).forEach(([k, v]) => {
-          if (v && v !== "-")
+        }).forEach(([k, v]) => {
+          if (v)
             infoBody.innerHTML += `<tr><td class="font-bold w-40 text-gray-400 uppercase text-[10px]">${k}</td><td class="text-gray-800 font-semibold">: ${v}</td></tr>`;
         });
 
         const gedungBody = document.getElementById("gedung-table-body");
-        if (data.kepemilikan_gedung) {
+        if (data.kepemilikan_gedung)
           Object.entries(data.kepemilikan_gedung).forEach(([k, v]) => {
-            gedungBody.innerHTML += `<tr><td class="font-bold w-40 text-gray-400 uppercase text-[10px]">${k.replace(
-              "_",
-              " "
-            )}</td><td class="text-gray-800 font-semibold">: ${v}</td></tr>`;
+            gedungBody.innerHTML += `<tr><td class="font-bold w-40 text-gray-400 uppercase text-[10px]">${k.replace("_", " ")}</td><td class="text-gray-800 font-semibold">: ${v}</td></tr>`;
           });
-        }
 
         const formatWrap = document.getElementById("format-tags");
         Object.entries(data.format_branch).forEach(([k, v]) => {
-          formatWrap.innerHTML += `<div class="flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black border ${
-            v
-              ? "bg-green-50 text-green-700 border-green-100"
-              : "bg-gray-50 text-gray-400 border-gray-100"
-          }">${k
-            .replace(/_/g, " ")
-            .toUpperCase()} <span class="material-icons text-sm">${
-            v ? "check_circle" : "cancel"
-          }</span></div>`;
+          formatWrap.innerHTML += `<div class="flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black border ${v ? "bg-green-50 text-green-700 border-green-100" : "bg-gray-50 text-gray-400 border-gray-100"}">${k.replace(/_/g, " ").toUpperCase()} <span class="material-icons text-sm">${v ? "check_circle" : "cancel"}</span></div>`;
         });
 
-        if (ident.foto_url)
-          document.getElementById("branch-image").src = ident.foto_url;
-        document.getElementById("info-koordinat").innerText =
-          ident.koordinat || "Koordinat belum terdaftar";
-
-        // --- 2. E-CHANNEL ---
-        const premisesContainer = document.getElementById("premises-container");
-        premisesContainer.innerHTML = `<div class="bg-card-green p-5 rounded-2xl border border-green-100 w-full sm:w-60"><div class="flex justify-between items-start mb-4"><span class="text-sm font-black text-green-800 uppercase">Premises</span><span class="badge-white">Mei</span></div><h2 class="text-4xl font-black text-gray-800">${
-          data.performance_potensi.kpi.score
-        }%</h2><p class="text-red-500 text-xs font-bold">↓ ${Math.abs(
-          data.performance_potensi.kpi.trend
-        )}%</p></div>`;
+        // 2. E-CHANNEL
+        document.getElementById("premises-container").innerHTML =
+          `<div class="bg-card-green p-5 rounded-2xl border border-green-100 w-full sm:w-60"><div class="flex justify-between items-start mb-4"><span class="text-sm font-black text-green-800 uppercase">Premises</span><span class="badge-white">Mei</span></div><h2 class="text-4xl font-black text-gray-800">${data.performance_potensi.kpi.score}%</h2><p class="text-red-500 text-xs font-bold">↓ ${Math.abs(data.performance_potensi.kpi.trend)}%</p></div>`;
 
         const ecGrid = document.getElementById("echannel-grid");
         const channels = [
@@ -410,81 +461,94 @@
         channels.forEach((ch) => {
           const item = data[ch.id];
           if (!item) return;
-          ecGrid.innerHTML += `<div class="bg-card-blue p-5 rounded-2xl border border-blue-50 transition-all hover:shadow-md"><div class="flex justify-between items-center mb-6"><span class="font-black text-blue-900 text-sm uppercase">${
-            ch.l
-          }</span><span class="badge-white">Mei</span></div><div class="text-[11px] space-y-2 mb-6"><div class="flex justify-between text-gray-800 font-bold"><span>Jumlah</span><span>: ${
-            item.jml
-          }</span></div><div class="flex justify-between pl-3 text-gray-500"><span>Onsite</span><span>: ${
-            item["on" + ch.id]
-          }</span></div><div class="flex justify-between pl-3 text-gray-500"><span>Offsite</span><span>: ${
-            item["off" + ch.id]
-          }</span></div></div><div class="space-y-4 pt-4 border-t border-blue-100/50"><div><div class="flex justify-between text-[9px] font-black text-gray-400 uppercase"><span>Productivity</span></div><div class="flex justify-between items-end"><span class="text-xl font-black text-gray-800">${
-            item["prd" + ch.id]
-          }</span><span class="text-red-500 text-[9px] font-bold">↓ 1.5%</span></div></div></div></div>`;
+          ecGrid.innerHTML += `
+            <div class="bg-card-blue p-5 rounded-2xl border border-blue-50 transition-all hover:shadow-md">
+                <div class="flex justify-between items-center mb-6"><span class="font-black text-blue-900 text-sm uppercase">${ch.l}</span><span class="badge-white">Mei</span></div>
+                <div class="text-[11px] space-y-2 mb-6">
+                    <div class="flex justify-between text-gray-800 font-bold"><span>Jumlah</span><span>: ${item.jml}</span></div>
+                    <div class="flex justify-between pl-3 text-gray-500"><span>Onsite</span><span>: ${item["on" + ch.id] || 0}</span></div>
+                    <div class="flex justify-between pl-3 text-gray-500"><span>Offsite</span><span>: ${item["off" + ch.id] || 0}</span></div>
+                </div>
+                <div class="space-y-4 pt-4 border-t border-blue-100/50">
+                    <div>
+                        <div class="flex justify-between text-[9px] font-black text-gray-400 uppercase"><span>Productivity</span></div>
+                        <div class="flex justify-between items-end">
+                            <span class="text-xl font-black text-gray-800">${item["prd" + ch.id] || "0%"}</span>
+                            <span class="text-red-500 text-[9px] font-bold">↓ 1.5%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
         });
 
-        // --- 3. PERFORMANCE ---
+        // 3. PERFORMANCE
         document.getElementById("perf-kpi").innerText =
           data.performance_potensi.kpi.score + "%";
         document.getElementById("perf-dpk").innerText =
           data.performance_potensi.total_dpk.market_share_total + "%";
         document.getElementById("perf-npl").innerText =
           data.performance_potensi.kredit.npl.current_value;
-
-        // RENDER GRAFIK
         initLineChart(
           "mainDpkChart",
-          [40, 55, 45, 70, 60, 85],
+          data.performance_potensi.total_dpk.trend_labels,
+          data.performance_potensi.total_dpk.trend_values,
           "#2563eb",
-          true
         );
         initLineChart(
           "loanChart",
-          [100, 120, 110, 150, 140, 190],
+          data.performance_potensi.kredit.trend_labels,
+          data.performance_potensi.kredit.trend_values,
           "#1e40af",
-          true
         );
 
-        // --- 4. HUMAN CAPITAL ---
+        // 4. HUMAN CAPITAL
         const hcBody = document.getElementById("hc-table-body");
-        let sumF = 0,
-          sumP = 0,
-          sumG = 0;
-        data.human_capital.detail_formasi.forEach((row) => {
-          sumF += row.formasi;
-          sumP += row.pemenuhan;
-          sumG += row.gap;
-          hcBody.innerHTML += `<tr class="hover:bg-blue-50/50 transition-colors"><td class="px-8 py-5 font-bold text-gray-700">${
-            row.jabatan
-          }</td><td class="px-8 py-5 text-center font-semibold text-gray-500">${
-            row.formasi
-          }</td><td class="px-8 py-5 text-center text-blue-600 font-black">${
-            row.pemenuhan
-          }</td><td class="px-8 py-5 text-center"><span class="${
-            row.gap > 0
-              ? "text-red-600 bg-red-50 px-3 py-1 rounded-full font-black"
-              : "text-gray-300"
-          }">${row.gap}</span></td></tr>`;
+        let sF = 0,
+          sP = 0,
+          sG = 0;
+        data.human_capital.detail_formasi.forEach((r) => {
+          sF += r.formasi;
+          sP += r.pemenuhan;
+          sG += r.gap;
+          hcBody.innerHTML += `<tr class="hover:bg-blue-50/50 transition-colors"><td class="px-8 py-5 font-bold text-gray-700">${r.jabatan}</td><td class="px-8 py-5 text-center font-semibold text-gray-500">${r.formasi}</td><td class="px-8 py-5 text-center text-blue-600 font-black">${r.pemenuhan}</td><td class="px-8 py-5 text-center"><span class="${r.gap > 0 ? "text-red-600 bg-red-50 px-3 py-1 rounded-full font-black" : "text-gray-300"}">${r.gap}</span></td></tr>`;
         });
-        document.getElementById("total-formasi").innerText = sumF;
-        document.getElementById("total-pemenuhan").innerText = sumP;
-        document.getElementById("total-gap").innerText = sumG;
+        document.getElementById("total-formasi").innerText = sF;
+        document.getElementById("total-pemenuhan").innerText = sP;
+        document.getElementById("total-gap").innerText = sG;
 
-        // --- 5. CUSTOMER ---
+        // 5. CUSTOMER (MODERN STYLE)
         document.getElementById("cust-total").innerText =
           data.customer.total_cif.total.toLocaleString("id-ID");
-        const genContainer = document.getElementById("cust-gen-container");
-        data.customer.demographic_generation.forEach((g) => {
-          genContainer.innerHTML += `<div class="bg-gray-50 p-6 rounded-2xl border border-gray-100"><p class="text-gray-400 text-[10px] font-black uppercase tracking-widest">${
-            g.label
-          }</p><p class="text-2xl font-black text-blue-900 mt-2">${g.value.toLocaleString(
-            "id-ID"
-          )}</p></div>`;
-        });
+        const genCont = document.getElementById("cust-gen-container");
+        const genIcons = {
+          Boomers: "elderly",
+          "Gen X": "person",
+          Millennials: "devices",
+          "Gen Z": "bolt",
+        };
+        const cLabels = [],
+          cValues = [];
 
-        // TAB LOGIC
+        data.customer.demographic_generation.forEach((g) => {
+          cLabels.push(g.label);
+          cValues.push(g.value);
+          const icon = genIcons[g.label] || "groups";
+          genCont.innerHTML += `
+            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
+                <div>
+                    <p class="text-gray-400 text-[10px] font-black uppercase tracking-widest">${g.label}</p>
+                    <p class="text-3xl font-black text-blue-900 mt-1">${g.value.toLocaleString("id-ID")}</p>
+                </div>
+                <div class="bg-blue-50 text-blue-600 w-12 h-12 rounded-2xl flex items-center justify-center">
+                    <span class="material-icons">${icon}</span>
+                </div>
+            </div>`;
+        });
+        initPieChart("customerPieChart", cLabels, cValues);
+
+        // TABS
         const tabs = document.querySelectorAll(".tab-btn");
-        tabs.forEach((btn) => {
+        tabs.forEach((btn) =>
           btn.addEventListener("click", () => {
             tabs.forEach((b) => b.classList.remove("tab-active"));
             document
@@ -494,8 +558,8 @@
             document
               .getElementById(btn.dataset.target)
               .classList.remove("hidden");
-          });
-        });
+          }),
+        );
         tabs[0].click();
       });
     </script>
